@@ -1,0 +1,47 @@
+
+<style>
+    @media (min-width: 768px) {
+        .load-project-modal-dialog {
+            width: 60%;
+            min-width: 700px;
+            margin: 30px auto auto auto;
+        }
+    }
+</style>
+<div ng-controller="ProjectControler" ng-click="clearContextMenu()" class="modal fade" id="loadProjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="loadPanelsModalLabel" aria-hidden="true">
+    <div class="modal-dialog xs-fullscreen-modal-dialog load-project-modal-dialog" role="document">
+        <div class="modal-content xs-fullscreen-modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title" id="loadPanelsModalLabel">{{ 'LOAD_PROJECT' | translate }}</h3>
+            </div>
+            <div class="modal-body xs-fullscreen-modal-body">
+                <div ng-show="isLoading">
+                    <div class="dim-background"></div>
+                    <div class="centered-spinner"></div>
+                </div>
+                <div id="load-project-message" ng-show="!!message" class="alert alert-danger">
+                    <button type="button" class="close" style="margin-top: -10px; margin-right: -8px;" onclick="$('.alert').hide()"><span>&times;</span></button>
+                    <span style="white-space: pre-wrap;" ng-bind="message"></span>
+                </div>
+                <h4 ng-hide="projectService.projects.length > 0" style="text-align: center; color: grey;">{{"NO_SAVED_DATA" | translate}}</h4>
+                
+                <div ng-show="projectService.projects.length > 0" >
+                    <div class="form-group form-inline">
+                        <div class="input-group">
+                            <span class="input-group-addon transparent"><span class="glyphicon glyphicon-search"></span></span>
+                            <input id="searchQuery" class="form-control" placeholder="{{ 'SEARCH' | translate }}" ng-model="searchQuery" ng-keyup="refreshFilter()">
+                        </div>
+                    </div>
+                    <div class="projects-grid">
+                        <div ng-if="!isMobile" ui-grid="projectsGridOptions" ui-grid-save-state ui-grid-pagination ui-grid-resize-columns style="height:60vh; max-height: 668px"></div>
+                        <div ng-if="isMobile" ui-grid="projectsGridOptions" ui-grid-save-state ui-grid-resize-columns style="height:calc(100vh - 126px)"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer xs-fullscreen-modal-footer" ng-hide="projectService.projects.length > 0">
+                <button style="width: 70px;" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

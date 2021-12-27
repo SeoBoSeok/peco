@@ -1,0 +1,47 @@
+
+<div ng-controller="ProjectControler" ng-init="init()" class="modal fade" id="saveProjectModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">{{ 'SAVE_PROJECT' | translate }}</h3>
+            </div>
+            <div class="modal-body">
+                <div ng-show="isLoading">
+                    <div class="dim-background"></div>
+                    <div class="centered-spinner"></div>
+                </div>
+                <div id="save-project-message" ng-show="!!message" class="alert alert-danger">
+                    <button type="button" class="close" style="margin-top: -10px; margin-right: -8px;" onclick="$('.alert').hide()"><span>&times;</span></button>
+                    <span style="white-space: pre-wrap;" ng-bind="message"></span>
+                </div>
+                <form>
+                    <div class="form-group">
+                        <label class="control-label">{{ 'SAVE_AS' | translate }}</label>
+                        <input id="projectToSaveKey" class="form-control" ng-model="projectToSaveKey" ng-keyup="$event.keyCode == 13 && saveProject()">
+                    </div>
+                </form>
+                <span>
+<!--                <table ng-show="projectService.projects.length > 0" class="table table-hover table-striped">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th style="width:90%">{{ 'NAME' | translate }}</th>-->
+<!--                        <th style="width:10%">{{ 'DELETE' | translate }}</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr ng-repeat="project in projectService.projects track by $index" style="cursor: pointer">-->
+<!--                        <td style="width:90%" ng-click="$parent.projectToSaveKey = project.name">{{project.name}}</td>-->
+<!--                        <td align="center" style="width:10%"><span class="glyphicon glyphicon-remove text-danger" ng-click="deleteProject(project)"></span></td>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+                    </span>
+            </div>
+            <div class="modal-footer">
+                <button style="min-width: 70px;" type="button" class="btn btn-default" data-dismiss="modal">{{ 'CANCEL' | translate }}</button>
+                <button style="min-width: 70px;" type="button" class="btn btn-primary" ng-click="saveProject()">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
