@@ -1653,7 +1653,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             enableCellEdit: true,
             enableColumnMenu: false,
             type: dimColType,
-            width: gridColumnPercentages.width
+            width: gridColumnPercentages.count
         });
 
         if ($scope.cfg.isWidthFirst) {
@@ -1941,7 +1941,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             enableCellEdit: true,
             enableColumnMenu: false,
             type: dimColType,
-            width: gridColumnPercentages.width
+            width: gridColumnPercentages.count
         });
 
         if ($scope.cfg.isWidthFirst) {
