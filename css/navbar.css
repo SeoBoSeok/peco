@@ -55,6 +55,8 @@
 .navbar-default .navbar-link:hover {
     color: #d2d2d2;
 }
+#navbar-title {display: flex; align-items: center;}
+#navbar-title img {height: 24px;}
 
 @media (max-width: 767px) {
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
