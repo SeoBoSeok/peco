@@ -132,7 +132,7 @@ var translationsEN = {
     FEET_INCHES_FRAC: "분수형 피트 & 인치 (1' 4 1/2\")",
     INCHES_FRAC: "분수형 인치 (16 1/2\")",
 
-    MATERIAL: "소재",
+    MATERIAL: "Wood",
     CREATE_MATERIAL: "새 소재 유형 만들기",
     MSG_NO_STOCK_MATERIAL: "사용 가능한 재고 판재 없음",
     CONSIDER_MATERIALS: "소재 고려",

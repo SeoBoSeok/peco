@@ -528,7 +528,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 $scope.cfg.isTileLabelVisible = true;
             }
             if ($scope.cfg.isMaterialEnabled === undefined) {
-                $scope.cfg.isMaterialEnabled = false;
+                $scope.cfg.isMaterialEnabled = true;
             }
             if ($scope.cfg.considerOrientation === undefined) {
                 $scope.cfg.considerOrientation = false;
@@ -574,7 +574,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 optimizationFactor: 1,
                 showDimensions: true,
                 isTileLabelVisible: CutListCfg.defaultIsTileLabelVisible,
-                isMaterialEnabled: false,
+                isMaterialEnabled: true,
                 units: DimensionProcessor.UnitsEnum.generic,
                 considerOrientation: false,
                 hasEdgeBanding: false,
@@ -1635,6 +1635,27 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
         $scope.gridOptions.columnDefs = [];
 
+        $scope.gridOptions.columnDefs.push({
+            field: 'material',
+            displayName: $translate.instant('MATERIAL'),
+            editType: 'dropdown',
+            enableCellEdit: true,
+            editableCellTemplate: 'ui-grid/dropdownEditor',
+            editDropdownOptionsArray: $scope.materialTypes,
+            editDropdownIdLabel: 'id',
+            editDropdownValueLabel: 'label',
+            width: gridColumnPercentages.material
+        });
+
+        $scope.gridOptions.columnDefs.push({
+            name: 'thinkness',
+            displayName: "두께(T)",
+            enableCellEdit: true,
+            enableColumnMenu: false,
+            type: dimColType,
+            width: gridColumnPercentages.width
+        });
+
         if ($scope.cfg.isWidthFirst) {
             $scope.gridOptions.columnDefs.push({
                 name: 'width',
@@ -1675,19 +1696,19 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             width: gridColumnPercentages.count
         });
 
-        if ($scope.cfg.isMaterialEnabled) {
-            $scope.gridOptions.columnDefs.push({
-                field: 'material',
-                displayName: $translate.instant('MATERIAL'),
-                editType: 'dropdown',
-                enableCellEdit: true,
-                editableCellTemplate: 'ui-grid/dropdownEditor',
-                editDropdownOptionsArray: $scope.materialTypes,
-                editDropdownIdLabel: 'id',
-                editDropdownValueLabel: 'label',
-                width: gridColumnPercentages.material
-            });
-        }
+        // if ($scope.cfg.isMaterialEnabled) {
+        //     $scope.gridOptions.columnDefs.push({
+        //         field: 'material',
+        //         displayName: $translate.instant('MATERIAL'),
+        //         editType: 'dropdown',
+        //         enableCellEdit: true,
+        //         editableCellTemplate: 'ui-grid/dropdownEditor',
+        //         editDropdownOptionsArray: $scope.materialTypes,
+        //         editDropdownIdLabel: 'id',
+        //         editDropdownValueLabel: 'label',
+        //         width: gridColumnPercentages.material
+        //     });
+        // }
 
         if ($scope.cfg.isTileLabelVisible) {
             $scope.gridOptions.columnDefs.push({
@@ -1902,6 +1923,27 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
         $scope.stockGridOptions.columnDefs = [];
 
+        $scope.stockGridOptions.columnDefs.push({
+            field: 'material',
+            displayName: $translate.instant('MATERIAL'),
+            // editType: 'dropdown',
+            enableCellEdit: true,
+            editableCellTemplate: 'ui-grid/dropdownEditor',
+            editDropdownOptionsArray: $scope.materialTypes,
+            editDropdownIdLabel: 'id',
+            editDropdownValueLabel: 'label',
+            width: gridColumnPercentages.material
+        });
+
+        $scope.stockGridOptions.columnDefs.push({
+            name: 'thinkness',
+            displayName: "두께(T)",
+            enableCellEdit: true,
+            enableColumnMenu: false,
+            type: dimColType,
+            width: gridColumnPercentages.width
+        });
+
         if ($scope.cfg.isWidthFirst) {
             $scope.stockGridOptions.columnDefs.push({
                 name: 'width',
@@ -1946,19 +1988,19 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             width: gridColumnPercentages.count
         });
 
-        if ($scope.cfg.isMaterialEnabled) {
-            $scope.stockGridOptions.columnDefs.push({
-                field: 'material',
-                displayName: $translate.instant('MATERIAL'),
-                editType: 'dropdown',
-                enableCellEdit: true,
-                editableCellTemplate: 'ui-grid/dropdownEditor',
-                editDropdownOptionsArray: $scope.materialTypes,
-                editDropdownIdLabel: 'id',
-                editDropdownValueLabel: 'label',
-                width: gridColumnPercentages.material
-            });
-        }
+        // if ($scope.cfg.isMaterialEnabled) {
+        //     $scope.stockGridOptions.columnDefs.push({
+        //         field: 'material',
+        //         displayName: $translate.instant('MATERIAL'),
+        //         editType: 'dropdown',
+        //         enableCellEdit: true,
+        //         editableCellTemplate: 'ui-grid/dropdownEditor',
+        //         editDropdownOptionsArray: $scope.materialTypes,
+        //         editDropdownIdLabel: 'id',
+        //         editDropdownValueLabel: 'label',
+        //         width: gridColumnPercentages.material
+        //     });
+        // }
 
         if ($scope.cfg.isTileLabelVisible) {
             $scope.stockGridOptions.columnDefs.push({
@@ -2260,7 +2302,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                             data.solution.mosaics.forEach(function(tile) {
                                 if (tile.usedAreaRatio < 0.97) {
                                     tile.tiles.forEach(function(d_tile) {
-                                        if (((d_tile.width * d_tile.height) >= 1000000) && !d_tile.hasChildren && !d_tile.final) {
+                                        if (((d_tile.width * d_tile.height) >= 100000) && !d_tile.hasChildren && !d_tile.final) {
                                             console.log(d_tile);
                                             $scope.stockTiles.push({
                                                 width: d_tile.width,
