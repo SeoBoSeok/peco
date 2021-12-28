@@ -195,6 +195,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         // {id: 'hr', label: 'Hrvatski'},
         // {id: 'it', label: 'Italiano'},
         // {id: 'nl', label: 'Nederlands'},
+        {id: 'ko', label: '한국어'},
         {id: 'ja', label: '日本語'},
         // {id: 'pl', label: 'Polski'},
         // {id: 'pt', label: 'Português'},
@@ -2213,64 +2214,68 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                     // console.log('data : ', data);
                     $scope.statusMessage = '자투리 계산중..';
                     // [체크 : 코딩 :: 자투리]
-                    if (data && data.solution && data.solution.mosaics) {
-                        // var newStockTiles = [];
-                        // previousStockTiles = $scope.stockTiles.filter(function(tile){
-                        //     return tile.width && tile.height
-                        // });
-                        // console.log('previous : ', previousStockTiles);
-                        // if(previousStockTiles.length) {
-                        //     // $scope.stockTiles = [];
-                        //     previousStockTiles.forEach(function(tile){
-                        //         console.log(tile);
-                        //         // $scope.stockTiles.push(tile);
-                        //     });
-                        // }
+                    $timeout(function(){
 
-                        // resetTiles
-                        // 1. usedStockPanel 계산
-                        // 
-                        updateStockTiles();
-                        newStockTile = data.solution.request.stockPanels;
-                        newStockTile.forEach(function(spanel, idx){
-                            data.solution.usedStockPanels.forEach(function(usPanel){
-                                if(spanel.id == usPanel.requestObjId) {
-                                    if (spanel.count > usPanel.count) {
-                                        spanel.count = spanel.count - usPanel.count;
-                                    } else {
-                                        newStockTile.splice(idx, 1);
-                                    }
-                                }
-                            });
-                        });
-                        newStockTile.forEach(function(ppanel){
-                            $scope.stockTiles.push({
-                                width: ppanel.width,
-                                height: ppanel.height,
-                                count: ppanel.count,
-                                label: ppanel.label + "-",
-                                enabled: true
-                            });
-                        });
-                        // 2. 자투리 계산
-                        data.solution.mosaics.forEach(function(tile) {
-                            if (tile.usedAreaRatio < 0.97) {
-                                tile.tiles.forEach(function(d_tile) {
-                                    if (!d_tile.hasChildren && !d_tile.final) {
-                                        console.log(d_tile);
-                                        $scope.stockTiles.push({
-                                            width: d_tile.width,
-                                            height: d_tile.height,
-                                            count: 1,
-                                            label: d_tile.label,
-                                            enabled: true
-                                        });
+                        if (data && data.solution && data.solution.mosaics) {
+                            console.log(TilingData);
+                            // var newStockTiles = [];
+                            // previousStockTiles = $scope.stockTiles.filter(function(tile){
+                            //     return tile.width && tile.height
+                            // });
+                            // console.log('previous : ', previousStockTiles);
+                            // if(previousStockTiles.length) {
+                            //     // $scope.stockTiles = [];
+                            //     previousStockTiles.forEach(function(tile){
+                            //         console.log(tile);
+                            //         // $scope.stockTiles.push(tile);
+                            //     });
+                            // }
+    
+                            // resetTiles
+                            // 1. usedStockPanel 계산
+                            // 
+                            updateStockTiles();
+                            newStockTile = data.solution.request.stockPanels;
+                            newStockTile.forEach(function(spanel, idx){
+                                data.solution.usedStockPanels.forEach(function(usPanel){
+                                    if(spanel.id == usPanel.requestObjId) {
+                                        if (spanel.count > usPanel.count) {
+                                            spanel.count = spanel.count - usPanel.count;
+                                        } else {
+                                            newStockTile.splice(idx, 1);
+                                        }
                                     }
                                 });
-                            }
-                        });
-                        $scope.isCalculating = false;
-                    }
+                            });
+                            // newStockTile.forEach(function(ppanel){
+                            //     $scope.stockTiles.push({
+                            //         width: ppanel.width,
+                            //         height: ppanel.height,
+                            //         count: ppanel.count,
+                            //         label: ppanel.label + "-",
+                            //         enabled: true
+                            //     });
+                            // });
+                            // 2. 자투리 계산
+                            data.solution.mosaics.forEach(function(tile) {
+                                if (tile.usedAreaRatio < 0.97) {
+                                    tile.tiles.forEach(function(d_tile) {
+                                        if (((d_tile.width * d_tile.height) >= 1000000) && !d_tile.hasChildren && !d_tile.final) {
+                                            console.log(d_tile);
+                                            $scope.stockTiles.push({
+                                                width: d_tile.width,
+                                                height: d_tile.height,
+                                                count: 1,
+                                                label: d_tile.label,
+                                                enabled: true
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                            $scope.isCalculating = false;
+                        }
+                    }, 2000);
                     // $scope.stockTiles.forEach(function(tile) {
                     //     tile.enabled = false;
                     // });
