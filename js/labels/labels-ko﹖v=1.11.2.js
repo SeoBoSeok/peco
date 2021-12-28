@@ -1,5 +1,5 @@
-// English
-var translationsEN = {
+// Korean
+var translationsKR = {
 
     TITLE: "PECO",
     PRO_VERSION: "베타버전",

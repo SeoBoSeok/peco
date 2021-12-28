@@ -8,10 +8,12 @@ app.config(['$translateProvider', '$windowProvider', '$qProvider', '$locationPro
         language = window.navigator.userLanguage || window.navigator.language;
         language = language.substring(0, 2);
     }
-
+    // console.log(language);
+    
     $translateProvider.translations('bg', translationsBG);
     $translateProvider.translations('en', translationsEN);
     $translateProvider.translations('de', translationsDE);
+    // $translateProvider.translations('ko', translationsKR);
     $translateProvider.translations('pl', translationsPL);
     $translateProvider.translations('pt', translationsPT);
     $translateProvider.translations('fa', translationsFA);
