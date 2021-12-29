@@ -5,7 +5,7 @@ app.service('PdfGenerator', ['DrawService', '$translate', '$q', '$timeout', 'Til
 
     self.cfg = {
         font: {size: "20px"},
-        headerText: "PECO Optimizer",
+        headerText: "PECO v1.0",
         additionalText: "",
         showSummary: true,
         showDate: true,

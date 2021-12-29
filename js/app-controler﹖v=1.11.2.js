@@ -3021,7 +3021,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             $scope.fileNameToDownload = $scope.currentProject.name;
             $scope.lastSavedFile.projectId = $scope.currentProject.id;
         } else if (!$scope.fileNameToDownload) {
-            $scope.fileNameToDownload = 'PECO Optimizer - ' + getGenericExportGeneratedFilename();
+            $scope.fileNameToDownload = 'PECO Optimizer - ' + getGenericExportGeneratedFilename() + " " + new Date().toLocaleTimeString().substring(3, 10);
         }
 
         $('#exportPdfModal').modal('show');
