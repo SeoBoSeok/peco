@@ -923,6 +923,17 @@ button:focus {
     margin-bottom: 60px;
 }
 
+.pull-right-span-more {
+    position: absolute;
+    right: -15px;
+    top: 6px;
+}
+.pull-right-span {
+    position: absolute;
+    right: -5px;
+    top: 6px;
+}
+
 @media (min-width: 768px) {
     .toast-top-right {
         top: 58px;

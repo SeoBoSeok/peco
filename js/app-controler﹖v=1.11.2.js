@@ -1654,20 +1654,20 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
         );
 
-        $scope.gridOptions.gridMenuCustomItems.push({
-            title: $translate.instant('DIMENSIONS_TO_LABELS'),
-            action: function ($event) {
-                if (!$scope.cfg.isTileLabelVisible || confirm($translate.instant('REPLACE_LABELS_QUESTION')) === true) {
-                    for (i = 0; i < $scope.tiles.length; i++) {
-                        if ($scope.tiles[i].width && $scope.tiles[i].height) {
-                            $scope.tiles[i].label = DimensionProcessor.formatDimensions($scope.tiles[i]);
-                        }
-                    }
-                    $scope.cfg.isTileLabelVisible = true;
-                }
-            },
-            order: 8
-        });
+        // $scope.gridOptions.gridMenuCustomItems.push({
+        //     title: $translate.instant('DIMENSIONS_TO_LABELS'),
+        //     action: function ($event) {
+        //         if (!$scope.cfg.isTileLabelVisible || confirm($translate.instant('REPLACE_LABELS_QUESTION')) === true) {
+        //             for (i = 0; i < $scope.tiles.length; i++) {
+        //                 if ($scope.tiles[i].width && $scope.tiles[i].height) {
+        //                     $scope.tiles[i].label = DimensionProcessor.formatDimensions($scope.tiles[i]);
+        //                 }
+        //             }
+        //             $scope.cfg.isTileLabelVisible = true;
+        //         }
+        //     },
+        //     order: 8
+        // });
 
         var dimColType = 'number';
 
@@ -1942,20 +1942,20 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
         );
 
-        $scope.stockGridOptions.gridMenuCustomItems.push({
-            title: $translate.instant('DIMENSIONS_TO_LABELS'),
-            action: function ($event) {
-                if (!$scope.cfg.isTileLabelVisible || confirm($translate.instant('REPLACE_LABELS_QUESTION')) === true) {
-                    for (i = 0; i < $scope.stockTiles.length; i++) {
-                        if ($scope.stockTiles[i].width && $scope.stockTiles[i].height) {
-                            $scope.stockTiles[i].label = DimensionProcessor.formatDimensions($scope.stockTiles[i]);
-                        }
-                    }
-                    $scope.cfg.isTileLabelVisible = true;
-                }
-            },
-            order: 8
-        });
+        // $scope.stockGridOptions.gridMenuCustomItems.push({
+        //     title: $translate.instant('DIMENSIONS_TO_LABELS'),
+        //     action: function ($event) {
+        //         if (!$scope.cfg.isTileLabelVisible || confirm($translate.instant('REPLACE_LABELS_QUESTION')) === true) {
+        //             for (i = 0; i < $scope.stockTiles.length; i++) {
+        //                 if ($scope.stockTiles[i].width && $scope.stockTiles[i].height) {
+        //                     $scope.stockTiles[i].label = DimensionProcessor.formatDimensions($scope.stockTiles[i]);
+        //                 }
+        //             }
+        //             $scope.cfg.isTileLabelVisible = true;
+        //         }
+        //     },
+        //     order: 8
+        // });
 
         var dimColType = 'number';
 
