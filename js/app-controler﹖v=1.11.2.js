@@ -2268,7 +2268,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 }
 
                 // Check if calculation is finished
-                if (data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) {
+                if ((data.status === 'RUNNING' && (data.solution.totalUsedArea >= ((1220*2440*$scope.cfg.unusedStockRatio)/100))) || data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) {
                     $timeout(function () {
                         $scope.statusMessage = null;
                         // $scope.isCalculating = false;
