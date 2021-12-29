@@ -518,7 +518,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             // unusedStock Ratio
             $scope.cfg.unusedStockRatio = parseFloat($scope.cfg.unusedStockRatio);
             if (isNaN($scope.cfg.unusedStockRatio)) {
-                $scope.cfg.unusedStockRatio = 3.3;
+                $scope.cfg.unusedStockRatio = 3;
             }
 
             // Set defaults if no cfg present
