@@ -24,6 +24,8 @@ app.service('CutListCfg', ['$location',
     this.breakPoint = 768;
 
     this.defaultCutThickness = 0;
+    // [코딩]
+    this.defaultUnusedStockRatio = 3;
     this.defaultIsTileLabelVisible = true;
 
     this.isEdgeBandingSupported = true;

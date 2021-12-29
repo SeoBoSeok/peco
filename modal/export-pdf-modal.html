@@ -48,28 +48,28 @@
                             <div class="form-group">
                                 <div class="col-xs-4">
                                     <label class="control-label" style="padding-top: 6px">{{ 'FONT_SIZE' | translate }}</label>
-                                    <div ng-if="!hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
+                                    <div ng-if="hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
                                 </div>
                                 <div class="col-xs-8">
-                                    <select ng-disabled="!hasPremiumFeatures()" class="form-control" ng-options="option as option.label for option in pdfFontList track by option.id" ng-model="pdfGenerator.cfg.font"></select>
+                                    <select ng-disabled="hasPremiumFeatures()" class="form-control" ng-options="option as option.label for option in pdfFontList track by option.id" ng-model="pdfGenerator.cfg.font"></select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-4">
                                     <label class="control-label" style="padding-top: 6px">{{ 'PDF_HEADER_TEXT' | translate }}</label>
-                                    <div ng-if="!hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
+                                    <div ng-if="hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
                                 </div>
                                 <div class="col-xs-8">
-                                    <input ng-disabled="!hasPremiumFeatures()" class="form-control input pull-right" style="" type="text" ng-model="pdfGenerator.cfg.headerText">
+                                    <input ng-disabled="hasPremiumFeatures()" class="form-control input pull-right" style="" type="text" ng-model="pdfGenerator.cfg.headerText">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-xs-4">
                                     <label class="control-label" style="padding-top: 6px">{{ 'PDF_ADDITIONAL_TEXT' | translate }}</label>
-                                    <div ng-if="!hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
+                                    <div ng-if="hasPremiumFeatures()" ng-click="validateSubscriptionFeature()" class="pro-only"><small>{{ 'PRO_FEATURE' | translate }}</small></div>
                                 </div>
                                 <div class="col-xs-8">
-                                    <textarea ng-disabled="!hasPremiumFeatures()" rows="3" class="form-control input pull-right" style="resize: none" type="text" ng-model="pdfGenerator.cfg.additionalText"></textarea>
+                                    <textarea ng-disabled="hasPremiumFeatures()" rows="3" class="form-control input pull-right" style="resize: none" type="text" ng-model="pdfGenerator.cfg.additionalText"></textarea>
                                 </div>
                             </div>
                         </div>

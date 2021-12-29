@@ -151,7 +151,7 @@
     </div>
     <div class="splash-loading"></div>
     <div class="splash-loading">
-        <img class="splash-loading" src="icon.png" alt="CutList Optimizer"></img>
+        <img class="splash-loading" src="icon.png" alt="PECO Optimizer"></img>
         <div ng-cloak ng-if="isAndroid()" style="position: absolute; bottom: -10px; text-align: center; width: 100%; color: #6371A7; font-weight: bold; white-space: nowrap;">PECO {{clientInfo.version}}<span ng-if="isFull"> Pro</span><span ng-if="clientInfo.hasActiveSubscription()"> {{ subscriptionService.getSubscriptionPlanLevelName() }}</span></div>
     </div>
 </div>
@@ -194,6 +194,14 @@
     </div>
 
     <div class="navbar-header pull-right">
+
+        <span id="jcalculate-btn">
+            <button ng-show="dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-jtask hidden-xs" style="min-width: 110px" ng-click="jSubmitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> 자투리계산&nbsp&nbsp</button>
+            <button ng-show="!dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-jtask hidden-xs" style="min-width: 110px" ng-click="jSubmitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> 자투리계산&nbsp&nbsp</button>
+            <button ng-show="isCalculating && tiling.mosaics.length > 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-success hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'ACCEPT' | translate }}&nbsp&nbsp</button>
+            <button ng-show="isCalculating && tiling.mosaics.length === 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-danger hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'CANCEL' | translate }}&nbsp&nbsp</button>
+        </span>
+
         <span id="calculate-btn">
             <button ng-show="dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-success hidden-xs" style="min-width: 110px" ng-click="submitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> {{ 'CALCULATE' | translate }}&nbsp&nbsp</button>
             <button ng-show="!dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-default hidden-xs" style="min-width: 110px" ng-click="submitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> {{ 'CALCULATE' | translate }}&nbsp&nbsp</button>
@@ -201,7 +209,14 @@
             <button ng-show="isCalculating && tiling.mosaics.length === 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-danger hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'CANCEL' | translate }}&nbsp&nbsp</button>
         </span>
 
-        <div class="btn-group hidden-xs">
+        <span id="export-pdf-btn">
+            <button ng-show="dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-default hidden-xs" style="min-width: 110px" ng-click="showExportPdfModal()" href="#"><i  class="material-icons md-center hidden-xs">save_alt</i> {{ 'SAVE' | translate }}&nbsp&nbsp</button>
+            <button ng-show="!dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-default hidden-xs" style="min-width: 110px" ng-click="showExportPdfModal()" href="#"><i class="material-icons md-center hidden-xs">save_alt</i> {{ 'SAVE' | translate }}&nbsp&nbsp</button>
+            <button ng-show="isCalculating && tiling.mosaics.length > 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-success hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">save_alt</i> {{ 'SAVE' | translate }}&nbsp&nbsp</button>
+            <button ng-show="isCalculating && tiling.mosaics.length === 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-danger hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">save_alt</i> {{ 'SAVE' | translate }}&nbsp&nbsp</button>
+        </span>        
+
+        <!-- <div class="btn-group hidden-xs">
             <button ng-disabled="!currentProject.isDirty" type="button" class="btn button-default btn-xs" ng-click="saveProject()"><i ng-hide="currentProject.isSaving" class="material-icons md-center">save_alt</i><i ng-show="currentProject.isSaving" class="material-icons md-center spinning" ng-class="{'spinning': currentProject.isSaving}">sync</i> {{ 'SAVE' | translate }}&nbsp&nbsp</button>
             <button type="button" class="btn button-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="caret"></span>
@@ -210,7 +225,7 @@
             <ul class="dropdown-menu">
                 <li><a ng-click="showSaveProjectModal()" href="#">{{ 'SAVE_AS' | translate }}...</a></li>
             </ul>
-        </div>
+        </div> -->
 
         <!-- <button type="button" style="color: white;" class="btn btn-top button-default hidden-xs" ng-click="openSettingsModal()" data-toggle="tooltip" data-placement="top" title="{{ 'SETTINGS' | translate }}" href="#"><i class="material-icons md-center">settings</i></span></button> -->
         <!-- <button ng-if="!isAndroid() && authService.isLoggedIn() && !clientInfo.hasActiveSubscription()" type="button" style="color: white;" class="btn btn-top button-default hidden-xs" ng-click="showSubscriptionModal()" data-toggle="tooltip" data-placement="top" title="{{ 'UPGRADE_PLAN' | translate }}" href="#"><i style="vertical-align: middle" data-feather="arrow-up-circle"></i></span> {{ 'UPGRADE_PLAN' | translate }}</button> -->
@@ -259,8 +274,8 @@
             <li><a ng-if="!isAndroid() && clientInfo.hasActiveSubscription()" ng-click="showSubscriptionModal();" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="dollar-sign"></i> {{ 'MANAGE_SUBSCRIPTION' | translate }}</a></li>
             <li><a ng-if="!isFull && !clientInfo.hasActiveSubscription() && isAndroid()" id="donate-btn" ng-click="donate()" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="dollar-sign"><i class="material-icons navbar-logo">dashboard</i></i> {{ 'PRO_VERSION' | translate }}</a></li>
             <li><a ng-if="isAndroid() && debugMode" ng-click="android.consumeIap()" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="dollar-sign"></i> CONSUME IAP</a></li>
-            <li ng-if="clientInfo.hasActiveSubscription()"><a ng-href="mailto:support+{{subscriptionService.getSubscriptionPlanLevelName() | lowercase}}@cutlistoptimizer.com?subject=CutList Optimizer {{clientInfo.version + ' ' + subscriptionService.getSubscriptionPlanLevelName() + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
-            <li ng-if="!clientInfo.hasActiveSubscription()"><a ng-href="mailto:support@cutlistoptimizer.com?subject=CutList Optimizer {{clientInfo.version + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
+            <li ng-if="clientInfo.hasActiveSubscription()"><a ng-href="mailto:support+{{subscriptionService.getSubscriptionPlanLevelName() | lowercase}}@cutlistoptimizer.com?subject=PECO Optimizer {{clientInfo.version + ' ' + subscriptionService.getSubscriptionPlanLevelName() + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
+            <li ng-if="!clientInfo.hasActiveSubscription()"><a ng-href="mailto:support@cutlistoptimizer.com?subject=PECO Optimizer {{clientInfo.version + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
             <li><a ng-click="showAboutModal()"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="info"></i> {{ 'ABOUT' | translate }}</a></li>
 
         </ul>
@@ -318,6 +333,11 @@
                         <div class="col-xs-3" style="float: left;">
                             <input class="hidden-xs form-control input-xs pull-right" style="width: 60px;" type="text"  ng-model="cfg.cutThicknessInput" ng-blur="cutThicknessInput()">
                             <input class="hidden-lg hidden-md hidden-sm form-control input-xs pull-right" style="margin-top: 0px; width: 60px;" type="text" ng-model="cfg.cutThicknessInput" ng-blur="cutThicknessInput()">
+                        </div>
+                        <span class="control-label col-xs-9">자투리 설정</span>
+                        <div class="col-xs-3" style="float: left;">
+                            <input class="hidden-xs form-control input-xs pull-right" style="width: 60px;" type="number"  ng-model="cfg.unusedStockRatioInput" ng-blur="unusedStockRatioInput()">
+                            <input class="hidden-lg hidden-md hidden-sm form-control input-xs pull-right" style="margin-top: 0px; width: 60px;" type="text" ng-model="cfg.unusedStockRatioInput" ng-blur="unusedStockRatioInput()">
                         </div>
                         <!-- <span class="control-label col-xs-9">{{ 'PANEL_LABELS' | translate }}</span>
                         <div class="col-xs-3" style="float: left;">
@@ -404,7 +424,7 @@
 
 
 
-                <!-- <div id="right-sidebar" class="col-md-4 " style="">
+                <div id="right-sidebar" class="col-md-4 " style="">
                     <div ng-controller="StatsController" id="results-info" ng-show="isTilingInfoVisible" class="info-container top-buffer" style="font-size: 13px;">
 
                         <div ng-show="tiling.mosaics.length > 0" class="panel panel-default">
@@ -615,7 +635,7 @@
                         </div>
 
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
 

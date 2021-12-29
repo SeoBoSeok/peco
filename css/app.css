@@ -80,12 +80,12 @@
 }
 
 .grid1 {
-    #height: 160px;
+    height: 160px;
     padding-right: 4px;
 }
 
 .grid2 {
-    #height: 160px;
+    height: 160px;
     padding-right: 4px;
 }
 
@@ -160,6 +160,21 @@
     color: #fff;
     background-color: #da4747;
     border-color: #da4747;
+}
+
+.button-jtask {
+    background-color: #3366cc;
+    border-color: #3366cc;
+    color: white;
+    padding-top:2px;
+    margin-top:5px;
+    height: 30px;
+}
+
+.button-jtask:hover, .button-jtask:focus, .button-jtask:active, .button-jtask.active, .open>.dropdown-toggle.button-jtask {
+    color: #fff;
+    background-color: #003399;
+    border-color: #003399;
 }
 
 .btn-top {
@@ -787,7 +802,7 @@ button:focus {
 }
 
 .table-striped>tbody>tr:nth-of-type(odd) {
-    background-color: #fff; !important;
+    background-color: #fff !important;
 }
 .table-striped>tbody>tr:nth-of-type(even) {
     background-color: #f9f9f9;

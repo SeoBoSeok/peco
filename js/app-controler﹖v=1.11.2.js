@@ -166,8 +166,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
     if (typeof android !== 'undefined') {
         $scope.android = android;
     }
-
-    var PANELS_ARRAY_MIN_LENGTH = 5;
+    // [코딩]
+    var PANELS_ARRAY_MIN_LENGTH = 1;
 
     $scope.isAndroid = function () {
         return typeof android !== 'undefined';
@@ -447,15 +447,16 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             });
         }
     }
-
+    // [코딩] :: $scope.isTilingInfoVisible = false; 강제적용. rightpanel 사라짐.
     if (!$scope.isTilingInfoVisible) {
         try {
             $scope.isTilingInfoVisible = angular.fromJson($window.localStorage.getItem("isTilingInfoVisible" + localStorageKeySuffix));
+            $scope.isTilingInfoVisible = false;
         } catch (e) {
             console.error(e.stack);
         }
         if ($scope.isTilingInfoVisible === null) {
-            $scope.isTilingInfoVisible = true;
+            $scope.isTilingInfoVisible = false;
         }
     }
 
@@ -513,6 +514,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
             // Assign the formatted cut thickness to the variable bound to the input
             $scope.cfg.cutThicknessInput = DimensionProcessor.formatDimension($scope.cfg.cutThickness, false);
+            // [코딩] :: percent for unusedStock Boundary Input
+            // unusedStock Ratio
+            $scope.cfg.unusedStockRatio = parseFloat($scope.cfg.unusedStockRatio);
+            if (isNaN($scope.cfg.unusedStockRatio)) {
+                $scope.cfg.unusedStockRatio = 3;
+            }
 
             // Set defaults if no cfg present
             if ($scope.cfg.optimizationFactor === undefined) {
@@ -567,6 +574,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 version: 1.0,
                 cutThickness: CutListCfg.defaultCutThickness,
                 cutThicknessInput: DimensionProcessor.formatDimension(CutListCfg.defaultCutThickness, false), // Assign the formated cut thickness to the variable bound to the input
+                unusedStockRatio : CutListCfg.defaultUnusedStockRatio,
+                unusedStockRatioInput : CutListCfg.defaultUnusedStockRatio,
                 useSingleStockUnit: false,
                 accuracyFactor: 0,
                 optimizationPriority: 0,
@@ -774,6 +783,21 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         }
     }, true);
 
+    // [코딩]
+    $scope.unusedStockRatioInput = function() {
+        $scope.cfg.unusedStockRatio = $scope.cfg.unusedStockRatioInput;
+        $scope.cfg.unusedStockRatioInput = $scope.cfg.unusedStockRatio;
+    }
+    $scope.$watch('cfg.unusedStockRatio', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
+            if ($scope.cfg.unusedStockRatio < 0) {
+                $scope.cfg.unusedStockRatio = 3;
+            }
+            $scope.dirtyData = true;
+            $scope.currentProject.isDirty = true;
+        }
+    }, true);
+
     $scope.$watch('cfg.cutThickness', function (newValue, oldValue) {
         if (newValue !== oldValue) {
             if ($scope.cfg.cutThickness < 0) {
@@ -903,6 +927,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         $scope.validateTilesArray();
         $scope.validateStockTilesArray();
         $scope.cfg.cutThicknessInput = DimensionProcessor.formatDimension($scope.cfg.cutThickness, false);
+        $scope.cfg.unusedStockRatioInput = $scope.cfg.unusedStockRatio;
 
         DrawService.setDimensionFormater(
             function (dimension) {
@@ -1635,26 +1660,26 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
         $scope.gridOptions.columnDefs = [];
 
-        $scope.gridOptions.columnDefs.push({
-            field: 'material',
-            displayName: $translate.instant('MATERIAL'),
-            editType: 'dropdown',
-            enableCellEdit: true,
-            editableCellTemplate: 'ui-grid/dropdownEditor',
-            editDropdownOptionsArray: $scope.materialTypes,
-            editDropdownIdLabel: 'id',
-            editDropdownValueLabel: 'label',
-            width: gridColumnPercentages.material
-        });
+        // $scope.gridOptions.columnDefs.push({
+        //     field: 'material',
+        //     displayName: $translate.instant('MATERIAL'),
+        //     editType: 'dropdown',
+        //     enableCellEdit: true,
+        //     editableCellTemplate: 'ui-grid/dropdownEditor',
+        //     editDropdownOptionsArray: $scope.materialTypes,
+        //     editDropdownIdLabel: 'id',
+        //     editDropdownValueLabel: 'label',
+        //     width: gridColumnPercentages.material
+        // });
 
-        $scope.gridOptions.columnDefs.push({
-            name: 'thinkness',
-            displayName: "두께(T)",
-            enableCellEdit: true,
-            enableColumnMenu: false,
-            type: dimColType,
-            width: gridColumnPercentages.count
-        });
+        // $scope.gridOptions.columnDefs.push({
+        //     name: 'thinkness',
+        //     displayName: "두께(T)",
+        //     enableCellEdit: true,
+        //     enableColumnMenu: false,
+        //     type: dimColType,
+        //     width: gridColumnPercentages.count
+        // });
 
         if ($scope.cfg.isWidthFirst) {
             $scope.gridOptions.columnDefs.push({
@@ -1696,19 +1721,19 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             width: gridColumnPercentages.count
         });
 
-        // if ($scope.cfg.isMaterialEnabled) {
-        //     $scope.gridOptions.columnDefs.push({
-        //         field: 'material',
-        //         displayName: $translate.instant('MATERIAL'),
-        //         editType: 'dropdown',
-        //         enableCellEdit: true,
-        //         editableCellTemplate: 'ui-grid/dropdownEditor',
-        //         editDropdownOptionsArray: $scope.materialTypes,
-        //         editDropdownIdLabel: 'id',
-        //         editDropdownValueLabel: 'label',
-        //         width: gridColumnPercentages.material
-        //     });
-        // }
+        if ($scope.cfg.isMaterialEnabled) {
+            $scope.gridOptions.columnDefs.push({
+                field: 'material',
+                displayName: $translate.instant('MATERIAL'),
+                editType: 'dropdown',
+                enableCellEdit: true,
+                editableCellTemplate: 'ui-grid/dropdownEditor',
+                editDropdownOptionsArray: $scope.materialTypes,
+                editDropdownIdLabel: 'id',
+                editDropdownValueLabel: 'label',
+                width: gridColumnPercentages.material
+            });
+        }
 
         if ($scope.cfg.isTileLabelVisible) {
             $scope.gridOptions.columnDefs.push({
@@ -1923,26 +1948,26 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
         $scope.stockGridOptions.columnDefs = [];
 
-        $scope.stockGridOptions.columnDefs.push({
-            field: 'material',
-            displayName: $translate.instant('MATERIAL'),
-            // editType: 'dropdown',
-            enableCellEdit: true,
-            editableCellTemplate: 'ui-grid/dropdownEditor',
-            editDropdownOptionsArray: $scope.materialTypes,
-            editDropdownIdLabel: 'id',
-            editDropdownValueLabel: 'label',
-            width: gridColumnPercentages.material
-        });
+        // $scope.stockGridOptions.columnDefs.push({
+        //     field: 'material',
+        //     displayName: $translate.instant('MATERIAL'),
+        //     // editType: 'dropdown',
+        //     enableCellEdit: true,
+        //     editableCellTemplate: 'ui-grid/dropdownEditor',
+        //     editDropdownOptionsArray: $scope.materialTypes,
+        //     editDropdownIdLabel: 'id',
+        //     editDropdownValueLabel: 'label',
+        //     width: gridColumnPercentages.material
+        // });
 
-        $scope.stockGridOptions.columnDefs.push({
-            name: 'thinkness',
-            displayName: "두께(T)",
-            enableCellEdit: true,
-            enableColumnMenu: false,
-            type: dimColType,
-            width: gridColumnPercentages.count
-        });
+        // $scope.stockGridOptions.columnDefs.push({
+        //     name: 'thinkness',
+        //     displayName: "두께(T)",
+        //     enableCellEdit: true,
+        //     enableColumnMenu: false,
+        //     type: dimColType,
+        //     width: gridColumnPercentages.count
+        // });
 
         if ($scope.cfg.isWidthFirst) {
             $scope.stockGridOptions.columnDefs.push({
@@ -1988,19 +2013,19 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             width: gridColumnPercentages.count
         });
 
-        // if ($scope.cfg.isMaterialEnabled) {
-        //     $scope.stockGridOptions.columnDefs.push({
-        //         field: 'material',
-        //         displayName: $translate.instant('MATERIAL'),
-        //         editType: 'dropdown',
-        //         enableCellEdit: true,
-        //         editableCellTemplate: 'ui-grid/dropdownEditor',
-        //         editDropdownOptionsArray: $scope.materialTypes,
-        //         editDropdownIdLabel: 'id',
-        //         editDropdownValueLabel: 'label',
-        //         width: gridColumnPercentages.material
-        //     });
-        // }
+        if ($scope.cfg.isMaterialEnabled) {
+            $scope.stockGridOptions.columnDefs.push({
+                field: 'material',
+                displayName: $translate.instant('MATERIAL'),
+                editType: 'dropdown',
+                enableCellEdit: true,
+                editableCellTemplate: 'ui-grid/dropdownEditor',
+                editDropdownOptionsArray: $scope.materialTypes,
+                editDropdownIdLabel: 'id',
+                editDropdownValueLabel: 'label',
+                width: gridColumnPercentages.material
+            });
+        }
 
         if ($scope.cfg.isTileLabelVisible) {
             $scope.stockGridOptions.columnDefs.push({
@@ -2260,6 +2285,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
                         if (data && data.solution && data.solution.mosaics) {
                             console.log(TilingData);
+                            console.log($scope.cfg.unusedStockRatio);
                             // var newStockTiles = [];
                             // previousStockTiles = $scope.stockTiles.filter(function(tile){
                             //     return tile.width && tile.height
@@ -2276,19 +2302,19 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                             // resetTiles
                             // 1. usedStockPanel 계산
                             // 
-                            updateStockTiles();
-                            newStockTile = data.solution.request.stockPanels;
-                            newStockTile.forEach(function(spanel, idx){
-                                data.solution.usedStockPanels.forEach(function(usPanel){
-                                    if(spanel.id == usPanel.requestObjId) {
-                                        if (spanel.count > usPanel.count) {
-                                            spanel.count = spanel.count - usPanel.count;
-                                        } else {
-                                            newStockTile.splice(idx, 1);
-                                        }
-                                    }
-                                });
-                            });
+                            // updateStockTiles();
+                            // newStockTile = data.solution.request.stockPanels;
+                            // newStockTile.forEach(function(spanel, idx){
+                            //     data.solution.usedStockPanels.forEach(function(usPanel){
+                            //         if(spanel.id == usPanel.requestObjId) {
+                            //             if (spanel.count > usPanel.count) {
+                            //                 spanel.count = spanel.count - usPanel.count;
+                            //             } else {
+                            //                 newStockTile.splice(idx, 1);
+                            //             }
+                            //         }
+                            //     });
+                            // });
                             // newStockTile.forEach(function(ppanel){
                             //     $scope.stockTiles.push({
                             //         width: ppanel.width,
@@ -2298,22 +2324,43 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                             //         enabled: true
                             //     });
                             // });
+                            // $scope.stockTiles
                             // 2. 자투리 계산
-                            data.solution.mosaics.forEach(function(tile) {
-                                if (tile.usedAreaRatio < 0.97) {
-                                    tile.tiles.forEach(function(d_tile) {
-                                        if (((d_tile.width * d_tile.height) >= 100000) && !d_tile.hasChildren && !d_tile.final) {
-                                            console.log(d_tile);
-                                            $scope.stockTiles.push({
-                                                width: d_tile.width,
-                                                height: d_tile.height,
-                                                count: 1,
-                                                label: d_tile.label,
-                                                enabled: true
-                                            });
+                            TilingData.mosaics.forEach(function(tile, index) {
+                                // 기존 panels에서 제작된거 제외, requestId 까지 추가해야하나?
+                                tile.panels.forEach(function(usedTile){
+                                    $scope.tiles.forEach(function(t){
+                                        if (usedTile.width == t.width && usedTile.height == t.height && usedTile.label == t.label) {
+                                            t.count -= usedTile.count;
                                         }
                                     });
-                                }
+                                });
+                                // 기존 stock에서 사용된거 제외
+                                // tile.forEach(function(mo){
+                                $scope.stockTiles.forEach(function(stock){
+                                    if (tile.material == stock.material && tile.stockLabel == stock.label) {
+                                        console.log('기존 stock에서 사용된거 제외 (requestStockId) : ', tile.requestStockId, "::", stock.requestObjId);
+                                        console.log('기존 stock에서 사용된거 제외 (material) : ', tile.material, "::", stock.material);
+                                        console.log('기존 stock에서 사용된거 제외 : (label) ', tile.stockLabel, "::", stock.label);
+                                        stock.count -= 1;
+                                    }
+                                });
+                                // });
+                                // if (tile.usedAreaRatio < 0.97) {
+                                tile.tiles.forEach(function(d_tile) {
+                                    if (((d_tile.width * d_tile.height) >= ((1220*2440*$scope.cfg.unusedStockRatio)/100)) && !d_tile.hasChildren && !d_tile.final) {
+                                        console.log(d_tile);
+                                        $scope.stockTiles.unshift({
+                                            width: d_tile.width,
+                                            height: d_tile.height,
+                                            material: tile.material,
+                                            count: 1,
+                                            label: tile.stockLabel + "-" + index,
+                                            enabled: true
+                                        });
+                                    }
+                                });
+                                // }
                             });
                             $scope.isCalculating = false;
                         }
@@ -2384,6 +2431,171 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
             if (tile.width && tile.height && tile.count || (tile.width == null && tile.height == null && tile.count == null && tile.label == null)) {
                 tile.isInvalid = false;
+            }
+            // [코딩]
+            if (tile.width == 2440 && tile.height == 1220) {
+                console.log('SubmitTask');
+                tile.enabled = true;
+            } else {
+                tile.enabled = false;
+            }
+        });
+
+        if ($scope.getNbrUsedTiles() === 0) {
+            $scope.isGridReloding = true;
+
+            $scope.tiles.forEach(function (tile) {
+                tile.isInvalid = true;
+            });
+
+            $timeout(function () {
+                $scope.isGridReloding = false;
+            }, 0);
+
+            ToastService.error($translate.instant('MSG_NO_PANELS'));
+        }
+
+        if ($scope.getNbrUsedStockTiles() === 0) {
+            $scope.isGridReloding = true;
+
+            $scope.stockTiles.forEach(function (tile) {
+                tile.isInvalid = true;
+            });
+
+            $timeout(function () {
+                $scope.isGridReloding = false;
+            }, 0);
+
+            ToastService.error($translate.instant('MSG_NO_STOCK_PANELS'));
+        }
+
+        if (getSmallestArea($scope.tiles) > getBiggestArea($scope.stockTiles)) {
+            if (confirm("Unable to fit specified panels on available stock sheets. Required panels are bigger than stock sheets!\n" +
+                "Are the specified dimensions misplaced? Should panel list be swapped with the stock sheet list?") === true) {
+                let tilesBak = $scope.tiles.slice();
+
+                $scope.tiles.length = 0;
+                [].push.apply($scope.tiles, $scope.stockTiles);
+
+                $scope.stockTiles.length = 0;
+                [].push.apply($scope.stockTiles, tilesBak);
+            }
+        }
+
+        // Check if there are tiles with no corresponding stock material
+        if ($scope.cfg.isMaterialEnabled) {
+            var noStockMaterialTiles = MaterialService.getNoStockMaterialTiles($scope.tiles, $scope.stockTiles);
+            if (noStockMaterialTiles.length > 0) {
+                var msg = $translate.instant('MSG_NO_STOCK_MATERIAL') + ': ';
+                noStockMaterialTiles.forEach(function (tile) {
+                    msg += DimensionProcessor.formatDimensions(tile);
+                    if (tile.material) {
+                        msg += ' (' + tile.material + ')';
+                    }
+                    msg += ' \\ ';
+                });
+                msg = msg.substring(0, msg.length - 3);   // Remove last separator
+                ToastService.error(msg);
+            }
+        }
+
+        if ($scope.getNbrUsedTiles() === 0 || $scope.getNbrUsedStockTiles() === 0) {
+            return;
+        }
+
+        $scope.isCalculating = true;
+        $scope.statusMessage = $translate.instant('INITIALIZING') + '...';
+
+        TilingService.submitTask($scope.tiles, $scope.stockTiles, $scope.cfg).then( function (response) {
+            $scope.requestStatus = response.data.statusCode;
+            $location.search('taskId', response.data.taskId);
+            $scope.scrolled = false;
+            $timeout(taskStatusPoller, 2000);
+        }, function (reason) {
+            if (reason.status === 402) {
+                if (!AuthService.isLoggedIn()) {
+                    $scope.isCalculating = false;
+                    $scope.statusMessage = null;
+                    $scope.showLoginModal();
+                    return;
+                }
+
+                // If we still have the indication that subscription is active, fetch it's refreshed data from server.
+                if (SubscriptionService.getActiveSubscriptionPlanLevel() !== 0) {
+                    SubscriptionService.getSubscription();
+                }
+
+                console.warn("Calculation was rejected because calculation thresholds were exceeded");
+                ClientInfo.executionThresholdExceeded = true;
+                $scope.statusMessage = $translate.instant('LIMITS_REACHED');
+                $timeout(function () {
+                    $scope.isCalculating = false;
+                    $scope.statusMessage = null;
+                    $scope.showSubscriptionModal();
+                }, 5000);
+
+            } else if (reason.status === 422) {
+                if (reason.data.statusCode === "5") {
+                    $scope.statusMessage = $translate.instant('TOO_MANY_PANELS');
+                    $scope.tiles.forEach(function (tile) {
+                        tile.isInvalid = true;
+                    });
+                } else if (reason.data.statusCode === "6") {
+                    $scope.statusMessage = $translate.instant('TOO_MANY_STOCK_PANELS');
+                    $scope.stockTiles.forEach(function (tile) {
+                        tile.isInvalid = true;
+                    });
+                }
+            } else if (reason.status === 429) {
+                $scope.statusMessage = $translate.instant('TASK_ALREADY_RUNNING');
+                TilingService.getRunningTaksIds().then(function (taskIds) {
+                    if (taskIds && taskIds[0]) {
+                        $scope.statusMessage = $scope.statusMessage + ' - <a href="?taskId=' + taskIds[0] + '" target="_blank">' + $translate.instant('OPEN_RUNNING_CALC') + '</a>';
+                    }
+                });
+                return;
+            } else if (typeof android === 'undefined') {
+                console.error("Calculation request failed\n" + JSON.stringify(reason));
+                $scope.statusMessage = $translate.instant('SERVER_UNAVAILABLE');
+            } else {
+                // We're running on an Android device
+                $scope.isCalculating = false;
+                $scope.statusMessage = null;
+            }
+        });
+    };
+
+    $scope.jSubmitTask = function() {
+
+        fetchVersionStatus();
+        TilingData.clear();
+        DrawService.clear();
+
+        $scope.tiles.forEach(function (tile) {
+            // Set count to 1 if none is set
+            if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
+                tile.count = 1;
+            }
+            if (tile.width && tile.height && tile.count || (tile.width == null && tile.height == null && tile.count == null && tile.label == null)) {
+                tile.isInvalid = false;
+            }
+        });
+
+        $scope.stockTiles.forEach(function (tile) {
+            // Set count to 1 if none is set
+            if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
+                tile.count = 1;
+            }
+            if (tile.width && tile.height && tile.count || (tile.width == null && tile.height == null && tile.count == null && tile.label == null)) {
+                tile.isInvalid = false;
+            }
+            // console.log('tile.width', tile.width);
+            // console.log('tile.height', tile.height);
+            if (tile.width == 2440 && tile.height == 1220) {
+                console.log('jSubmitTask');
+                tile.enabled = false;
+            } else {
+                tile.enabled = true;
             }
         });
 
@@ -2720,7 +2932,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             $scope.fileNameToDownload = $scope.currentProject.name;
             $scope.lastSavedFile.projectId = $scope.currentProject.id;
         } else if (!$scope.fileNameToDownload) {
-            $scope.fileNameToDownload = 'CutList Optimizer - ' + getGenericExportGeneratedFilename();
+            $scope.fileNameToDownload = 'PECO Optimizer - ' + getGenericExportGeneratedFilename();
         }
 
         $('#exportPdfModal').modal('show');
@@ -2777,7 +2989,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             $scope.fileNameToDownload = $scope.currentProject.name;
             $scope.lastSavedFile.projectId = $scope.currentProject.id;
         } else if (!$scope.fileNameToDownload) {
-            $scope.fileNameToDownload = 'CutList Optimizer - ' + getGenericExportGeneratedFilename();
+            $scope.fileNameToDownload = 'PECO Optimizer - ' + getGenericExportGeneratedFilename();
         }
 
         $('#exportImgModal').modal('show');
@@ -3242,11 +3454,11 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
     $scope.getSubscriptionMailHref = function() {
 
         if (!ClientInfo) {
-            return "mailto:support+invoice@cutlistoptimizer.com?subject=CutList Optimizer Invoice";
+            return "mailto:support+invoice@cutlistoptimizer.com?subject=PECO Optimizer Invoice";
         }
 
         var href = "mailto:support+invoice@cutlistoptimizer.com" +
-            "?subject=CutList Optimizer " + ClientInfo.version + " | " +
+            "?subject=PECO Optimizer " + ClientInfo.version + " | " +
             "Invoice for " + ClientInfo.id;
 
         if (ClientInfo.hasActiveSubscription()) {
