@@ -2326,7 +2326,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                             // });
                             // $scope.stockTiles
                             // 2. 자투리 계산
-                            TilingData.mosaics.forEach(function(tile, index) {
+                            TilingData.mosaics.forEach(function(tile) {
                                 // 기존 panels에서 제작된거 제외, requestId 까지 추가해야하나?
                                 tile.panels.forEach(function(usedTile){
                                     $scope.tiles.forEach(function(t){
@@ -2339,25 +2339,34 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                                 });
                                 // 기존 stock에서 사용된거 제외
                                 // tile.forEach(function(mo){
-                                $scope.stockTiles.forEach(function(stock){
+                                $scope.stockTiles.forEach(function(stock, index, obj){
+                                    console.log('stock', stock);
                                     if (tile.material == stock.material && tile.stockLabel == stock.label) {
                                         console.log('기존 stock에서 사용된거 제외 (requestStockId) : ', tile.requestStockId, "::", stock.requestObjId);
                                         console.log('기존 stock에서 사용된거 제외 (material) : ', tile.material, "::", stock.material);
                                         console.log('기존 stock에서 사용된거 제외 : (label) ', tile.stockLabel, "::", stock.label);
-                                        stock.count -= 1;
+                                        // stock.count -= 1;
+                                        // [코딩] :: todo
+                                        if (stock.count == 1) {
+                                            obj.splice(index, 1); // stockTiles 목록에서 제외
+                                        } else {
+                                            stock.count -= 1;
+                                        }
+                                            
                                     }
                                 });
                                 // });
                                 // if (tile.usedAreaRatio < 0.97) {
-                                tile.tiles.forEach(function(d_tile) {
+                                var countingIndex = 0;
+                                tile.tiles.forEach(function(d_tile, i) {
                                     if (((d_tile.width * d_tile.height) >= ((1220*2440*$scope.cfg.unusedStockRatio)/100)) && !d_tile.hasChildren && !d_tile.final) {
-                                        console.log(d_tile);
+                                        console.log('d_tile', d_tile);
                                         $scope.stockTiles.unshift({
                                             width: d_tile.width,
                                             height: d_tile.height,
                                             material: tile.material,
                                             count: 1,
-                                            label: tile.stockLabel + "-" + index,
+                                            label: tile.stockLabel + "-" + ++countingIndex,
                                             enabled: true
                                         });
                                     }
