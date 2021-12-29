@@ -2268,16 +2268,16 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 }
 
                 // Check if calculation is finished
-                if ((data.status === 'RUNNING' && (data.solution.totalUsedArea >= ((1220*2440*$scope.cfg.unusedStockRatio)/100))) || data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) {
-                    // $timeout(function () {
-                    //     $scope.statusMessage = null;
-                    //     // $scope.isCalculating = false;
-                    //     $location.search('taskId', null);
-                    //     $scope.isBlocked = false;
-                    //     if (AuthService.isLoggedIn()) {
-                    //         AuthService.getAnalyticsData();
-                    //     }
-                    // }, 2000);
+                if ((data.status === 'RUNNING' && (!!data.solution.mosaics[0].material) && (data.solution.totalUsedArea >= ((1220*2440*$scope.cfg.unusedStockRatio)/100))) || data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) {
+                    $timeout(function () {
+                        $scope.statusMessage = null;
+                        // $scope.isCalculating = false;
+                        $location.search('taskId', null);
+                        $scope.isBlocked = false;
+                        if (AuthService.isLoggedIn()) {
+                            AuthService.getAnalyticsData();
+                        }
+                    }, 2000);
                     // console.log('data : ', data);
                     $scope.statusMessage = '자투리 계산중..';
                     // [체크 : 코딩 :: 자투리]
