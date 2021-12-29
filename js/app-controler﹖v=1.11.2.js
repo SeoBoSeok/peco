@@ -518,7 +518,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             // unusedStock Ratio
             $scope.cfg.unusedStockRatio = parseFloat($scope.cfg.unusedStockRatio);
             if (isNaN($scope.cfg.unusedStockRatio)) {
-                $scope.cfg.unusedStockRatio = 3;
+                $scope.cfg.unusedStockRatio = 3.3;
             }
 
             // Set defaults if no cfg present
@@ -2330,7 +2330,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                                 // 기존 panels에서 제작된거 제외, requestId 까지 추가해야하나?
                                 tile.panels.forEach(function(usedTile){
                                     $scope.tiles.forEach(function(t){
-                                        if (usedTile.width == t.width && usedTile.height == t.height && usedTile.label == t.label) {
+                                        // console.log('usedTile', usedTile);
+                                        // console.log('t', t);
+                                        if (((usedTile.width == t.width && usedTile.height == t.height) || (usedTile.width == t.height && usedTile.height == t.width)) && usedTile.label == t.label) {
                                             t.count -= usedTile.count;
                                         }
                                     });
@@ -2424,6 +2426,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
         });
 
+        $scope.tiles.forEach(function (item, index, tile) {
+            if (item.count === 0) {
+                tile.splice(index, 1);
+            }
+        });
+
         $scope.stockTiles.forEach(function (tile) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
@@ -2438,6 +2446,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 tile.enabled = true;
             } else {
                 tile.enabled = false;
+            }
+        });
+
+        $scope.stockTiles.forEach(function (item, index, tile) {
+            if (item.count === 0) {
+                tile.splice(index, 1);
             }
         });
 
@@ -2581,6 +2595,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             }
         });
 
+        $scope.tiles.forEach(function (item, index, tile) {
+            if (item.count === 0) {
+                tile.splice(index, 1);
+            }
+        });
+
         $scope.stockTiles.forEach(function (tile) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
@@ -2596,6 +2616,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 tile.enabled = false;
             } else {
                 tile.enabled = true;
+            }
+        });
+
+        $scope.stockTiles.forEach(function (item, index, tile) {
+            if (item.count === 0) {
+                tile.splice(index, 1);
             }
         });
 

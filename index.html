@@ -336,7 +336,7 @@
                         </div>
                         <span class="control-label col-xs-9">자투리 설정</span>
                         <div class="col-xs-3" style="float: left;">
-                            <input class="hidden-xs form-control input-xs pull-right" style="width: 60px;" type="number"  ng-model="cfg.unusedStockRatioInput" ng-blur="unusedStockRatioInput()">
+                            <input class="hidden-xs form-control input-xs pull-right" style="width: 60px;" type="number" min="0" max="10"  ng-model="cfg.unusedStockRatioInput" ng-blur="unusedStockRatioInput()">
                             <input class="hidden-lg hidden-md hidden-sm form-control input-xs pull-right" style="margin-top: 0px; width: 60px;" type="text" ng-model="cfg.unusedStockRatioInput" ng-blur="unusedStockRatioInput()">
                         </div>
                         <!-- <span class="control-label col-xs-9">{{ 'PANEL_LABELS' | translate }}</span>
