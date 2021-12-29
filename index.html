@@ -158,7 +158,7 @@
 
 <div ng-show="isBlocked" class="dim-background fade"></div>
 <div ng-show="isBlocked && !statusMessage" class="centered-spinner fade"></div>
-<div id="block-message" ng-show="(isCalculating || isBlocked) && !!statusMessage" ng-cloak class="loading-modal"  ng-style="isAdBannerVisible && {'bottom': '50px'}" ng-click="stopTask()">
+<div id="block-message" ng-show="(isCalculating || isBlocked) && !!statusMessage" ng-cloak class="loading-modal"  ng-style="isAdBannerVisible && {'bottom': '50px'}" > <!--ng-click="stopTask()""-->
     <div class="spinner" ng-style="isAdBannerVisible && {'bottom': '50px'}"></div>
     <div class="loading-message" ng-bind-html="statusMessage"></div>
 </div>
@@ -261,12 +261,12 @@
 
             <li><a ng-click="clear()" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="file"></i> {{ 'RESET_DATA' | translate }}</a></li>
             <li class="hidden-lg hidden-md hidden-sm"><a ng-click="showSaveProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="download"></i> {{ 'SAVE_PROJECT' | translate }}</a></li>
-            <!-- <li><a ng-click="showLoadProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="upload"></i> {{ 'LOAD_PROJECT' | translate }}</a></li>
+            <li><a ng-click="showLoadProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="upload"></i> {{ 'LOAD_PROJECT' | translate }}</a></li>
 
             <li id="menu-separator-2" role="separator" class="divider"></li>
 
-            <li><a id="generate-pdf-btn" ng-click="showExportPdfModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="file-text"></i> {{ 'EXPORT_PDF' | translate }}</a></li>
-            <li><a id="generate-img-btn" ng-click="showExportImgModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="image"></i> {{ 'EXPORT_IMG' | translate }}</a></li>
+            <li><a id="generate-pdf-btn" ng-click="saveProjectLocalStorage()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="file-text"></i> {{ 'EXPORT_PDF' | translate }}</a></li>
+            <!--<li><a id="generate-img-btn" ng-click="showExportImgModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="image"></i> {{ 'EXPORT_IMG' | translate }}</a></li>
 
             <li id="menu-separator-3" role="separator" class="divider"></li>
 

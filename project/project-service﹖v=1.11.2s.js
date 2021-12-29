@@ -79,11 +79,70 @@ app.service('ProjectService', ['TilingData', 'DimensionProcessor', '$translate',
     self.loadSavedProjects = function () {
 
         var deferred = $q.defer();
+        
+        // deferred.resolve([
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T04:15:19.289+0000",
+        //       "updated": "2021-12-29T17:23:17.100+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 3",
+        //       "id": 170380308
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T05:25:08.083+0000",
+        //       "updated": "2021-12-08T05:25:08.083+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 2-2",
+        //       "id": 170382407
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T05:24:02.461+0000",
+        //       "updated": "2021-12-08T05:24:02.461+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 2-1",
+        //       "id": 170382377
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T05:21:31.370+0000",
+        //       "updated": "2021-12-08T05:23:11.819+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 3-2",
+        //       "id": 170382297
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T05:21:20.818+0000",
+        //       "updated": "2021-12-08T05:21:20.818+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 3-1",
+        //       "id": 170382291
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T04:14:04.284+0000",
+        //       "updated": "2021-12-08T04:35:45.238+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 2",
+        //       "id": 170380266
+        //     },
+        //     {
+        //       "date": null,
+        //       "created": "2021-12-08T04:12:30.925+0000",
+        //       "updated": "2021-12-08T04:12:30.925+0000",
+        //       "userId": "epicenteryoun@gmail.com",
+        //       "name": "Test Cycle 1",
+        //       "id": 170380213
+        //     }
+        //   ]);
 
-        if (CutListCfg.useLocalStorageAsRepository || !ClientInfo.email) {
+        // if (CutListCfg.useLocalStorageAsRepository || !ClientInfo.email) {
             self.projects.length = 0;
             for (var key in localStorage) {
-                if (typeof key === 'string' && key.startsWith(SAVED_PROJECT_PREFIX)) {
+                if (typeof key === 'string' && key.startsWith("projects-")) {
                     try {
                         var project = null;
                         try {
@@ -96,76 +155,78 @@ app.service('ProjectService', ['TilingData', 'DimensionProcessor', '$translate',
                             }
                         }
                         if (!!project) {
-                            self.projects.push(project);
+                            self.projects = project;
                         }
                     } catch (e) {
                         console.error("Error while loading project from localStorage\n" + "key[" + key + "]\n data[" + localStorage[key] + "]" + e.stack);
                     }
                 }
             }
+            // console.log(self.projects);
             console.info("Loaded [" + self.projects.length + "] projects from localStorage");
             deferred.resolve();
-        } else {
+        // } else {
 
-            if (!ClientInfo.email) {
-                console.warn("Requested to load projects from server without knowing the user");
-                deferred.reject();
-                return deferred.promise;
-            }
+        //     if (!ClientInfo.email) {
+        //         console.warn("Requested to load projects from server without knowing the user");
+        //         deferred.reject();
+        //         return deferred.promise;
+        //     }
 
-            console.info("Loading projects from server...");
+        //     console.info("Loading projects from server...");
 
-            $http({
-                url: CutListCfg.localBaseUrl + '/projects?userId=' + encodeURIComponent(ClientInfo.email) + '&metadataOnly=true',
-                method: "GET",
-                headers: AuthService.getHttpHeaders()
-            }).then(function (response) {
-                try {
-                    self.projects.length = 0;
-                    Array.prototype.push.apply(self.projects, response.data);
-                    console.info("Loaded [" + self.projects.length + "] projects from server");
-                    self.removeLocalStorageProjects();
-                    deferred.resolve(response);
-                } catch(e) {
-                    console.error("Error retrieving projects from server\n" + e.stack);
-                    deferred.reject(response);
-                }
-            }, function (response) {
-                console.warn("Error while retrieving projects from server: " + JSON.stringify(response));
-                deferred.reject(response);
-            });
-        }
+        //     $http({
+        //         url: CutListCfg.localBaseUrl + '/projects?userId=' + encodeURIComponent(ClientInfo.email) + '&metadataOnly=true',
+        //         method: "GET",
+        //         headers: AuthService.getHttpHeaders()
+        //     }).then(function (response) {
+        //         try {
+        //             self.projects.length = 0;
+        //             Array.prototype.push.apply(self.projects, response.data);
+        //             console.info("Loaded [" + self.projects.length + "] projects from server");
+        //             self.removeLocalStorageProjects();
+        //             deferred.resolve(response);
+        //         } catch(e) {
+        //             console.error("Error retrieving projects from server\n" + e.stack);
+        //             deferred.reject(response);
+        //         }
+        //     }, function (response) {
+        //         console.warn("Error while retrieving projects from server: " + JSON.stringify(response));
+        //         deferred.reject(response);
+        //     });
+        // }
 
         return deferred.promise;
     };
 
     self.loadProjectFromServer = function(id) {
-        var deferred = $q.defer();
+        // var deferred = $q.defer();
 
-        $http({
-            url: CutListCfg.localBaseUrl + '/projects/' + id,
-            method: "GET",
-            headers: AuthService.getHttpHeaders()
-        }).then(function (response) {
-            try {
-                const loadedProject = response.data;
-                loadedProject.data = JSON.parse(loadedProject.data);
-                var idx = self.projects.findIndex(function (project) {
-                    return project.id == loadedProject.id;
-                });
-                self.projects[idx].data = loadedProject.data;
-                console.info("Loaded project data from server: id[" + self.projects[idx].id + "] name[" + self.projects[idx].name + "]");
-                deferred.resolve(response);
-            } catch(e) {
-                console.error("Error parsing project id[" + id + "] retrieved from server\n" + e.stack);
-                deferred.reject(response);
-            }
-        }, function (reason) {
-            console.error("Error retrieving project id[" + id + "] from server\n" + e.stack);
-            deferred.reject(reason);
-        });
+        window.location.href = '/?taskId=' + id;
 
-        return deferred.promise;
+        // $http({
+        //     url: CutListCfg.localBaseUrl + '/projects/' + id,
+        //     method: "GET",
+        // }).then(function (response) {
+        //     try {
+        //         const loadedProject = response.data;
+        //         loadedProject.data = JSON.parse(loadedProject.data);
+        //         var idx = self.projects.findIndex(function (project) {
+        //             return project.id == loadedProject.id;
+        //         });
+        //         self.projects[idx].data = loadedProject.data;
+        //         console.info("Loaded project data from server: id[" + self.projects[idx].id + "] name[" + self.projects[idx].name + "]");
+        //         deferred.resolve(response);
+        //     } catch(e) {
+        //         console.error("Error parsing project id[" + id + "] retrieved from server\n" + e.stack);
+        //         deferred.reject(response);
+        //     }
+        // }, function (reason) {
+        //     console.error("Error retrieving project id[" + id + "] from server\n" + e.stack);
+        //     deferred.reject(reason);
+        // });
+
+        // return deferred.promise;
     }
 
     self.loadProject = function (projectData, tiles, stockTiles, cfg) {

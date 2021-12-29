@@ -20,6 +20,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
     $scope.configurationProperties = ConfigurationProperties;
     $scope.pdfGenerator = PdfGenerator;
     $scope.window = $window;
+    $scope.projectData = JSON.parse(window.localStorage.getItem("projects-")) || [];
+    // console.log($scope.projectData);
 
     // <editor-fold defaultstate="collapsed" desc="Current project">
     try {
@@ -1145,7 +1147,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
 
     // </editor-fold>
 
-    function addNewTile(width, height, count) {
+    function addNewTile(width, height, count, material, label) {
 
         if (typeof width === 'undefined') {
             width = null;
@@ -1159,6 +1161,14 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             count = null;
         }
 
+        if (typeof material === 'undefined') {
+            material = null;
+        }
+
+        if (typeof label === 'undefined') {
+            label = null;
+        }
+
         var tileId = -1;
         angular.forEach($scope.tiles, function (tile) {
             tileId = Math.max(tile.id, tileId);
@@ -1167,6 +1177,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             width: width,
             height: height,
             count: count,
+            material: material,
+            label: label,
             enabled: true,
             id: tileId + 1,
             orientation: $scope.cfg.considerOrientation ? 1 : 0
@@ -1383,7 +1395,16 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         $scope.tiles = [];
         resetTiles();
     }
+    // var resetTilesDuringFetch = function () {
 
+    //     if (!$scope.tiles) {
+    //         $scope.tiles = [];
+    //     }
+
+    //     $scope.tiles.length = 0;
+    //     $scope.refreshMaterialsList();
+    //     $scope.refreshEdgeBandList();
+    // };
 
     $scope.gridOptions = {
         enableCellEditOnFocus: true,
@@ -1492,73 +1513,73 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 },
                 order: 0
             },
-            {
-                title: $translate.instant('SAVE_LIST'),
-                action: function ($event) {
+            // {
+            //     title: $translate.instant('SAVE_LIST'),
+            //     action: function ($event) {
 
-                    if (self.isAndroid && !validateSubscriptionFeature()) {
-                        return;
-                    }
+            //         if (self.isAndroid && !validateSubscriptionFeature()) {
+            //             return;
+            //         }
 
-                    if (!validateLogin()) {
-                        return;
-                    }
+            //         if (!validateLogin()) {
+            //             return;
+            //         }
 
-                    $scope.panelListToSave = $scope.tiles;
-                    if ((!PanelListService.panelLists || PanelListService.panelLists.length === 0) && ClientInfo.email) {
-                        // Block and load panel lists from server before opening load panel list modal
-                        $scope.isBlocked = true;
-                        PanelListService.loadSavedPanelLists().then(function () {
-                            $('#savePanelListModal').modal('show');
-                            $scope.isBlocked = false;
-                        }, function (reason) {
-                            ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
-                            $scope.isBlocked = false;
-                        });
-                    } else {
-                        PanelListService.loadSavedPanelLists();
-                        $('#savePanelListModal').modal('show');
-                    }
+            //         $scope.panelListToSave = $scope.tiles;
+            //         if ((!PanelListService.panelLists || PanelListService.panelLists.length === 0) && ClientInfo.email) {
+            //             // Block and load panel lists from server before opening load panel list modal
+            //             $scope.isBlocked = true;
+            //             PanelListService.loadSavedPanelLists().then(function () {
+            //                 $('#savePanelListModal').modal('show');
+            //                 $scope.isBlocked = false;
+            //             }, function (reason) {
+            //                 ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
+            //                 $scope.isBlocked = false;
+            //             });
+            //         } else {
+            //             PanelListService.loadSavedPanelLists();
+            //             $('#savePanelListModal').modal('show');
+            //         }
 
-                    $timeout(function () {
-                        var input = document.getElementById('panelListToSaveName');
-                        input.focus();
-                        input.select();
-                    }, 500);
-                },
-                order: 2
-            },
-            {
-                title: $translate.instant('LOAD'),
-                action: function ($event) {
+            //         $timeout(function () {
+            //             var input = document.getElementById('panelListToSaveName');
+            //             input.focus();
+            //             input.select();
+            //         }, 500);
+            //     },
+            //     order: 2
+            // },
+            // {
+            //     title: $translate.instant('LOAD'),
+            //     action: function ($event) {
                     
-                    const hasLocalSavedPanelLists = CutListCfg.useLocalStorageAsRepository && PanelListService.panelLists && PanelListService.panelLists.length > 0;
+            //         const hasLocalSavedPanelLists = CutListCfg.useLocalStorageAsRepository && PanelListService.panelLists && PanelListService.panelLists.length > 0;
 
-                    if (self.isAndroid && !hasLocalSavedPanelLists && !validateSubscriptionFeature()) {
-                        return;
-                    }
+            //         if (self.isAndroid && !hasLocalSavedPanelLists && !validateSubscriptionFeature()) {
+            //             return;
+            //         }
 
-                    if (!hasLocalSavedPanelLists && !validateLogin()) {
-                        return;
-                    }
+            //         if (!hasLocalSavedPanelLists && !validateLogin()) {
+            //             return;
+            //         }
                     
-                    $scope.panelListToLoadDst = $scope.tiles;
-                    if (!PanelListService.panelLists || PanelListService.panelLists.length === 0) {
-                        $scope.isBlocked = true;
-                        PanelListService.loadSavedPanelLists().then(function () {
-                            $('#loadPanelListModal').modal('show');
-                            $scope.isBlocked = false;
-                        }, function (reason) {
-                            ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
-                            $scope.isBlocked = false;
-                        });
-                    } else {
-                        PanelListService.loadSavedPanelLists();
-                        $('#loadPanelListModal').modal('show');
-                    }
-                },
-                order: 1
-            },
+            //         $scope.panelListToLoadDst = $scope.tiles;
+            //         if (!PanelListService.panelLists || PanelListService.panelLists.length === 0) {
+            //             $scope.isBlocked = true;
+            //             PanelListService.loadSavedPanelLists().then(function () {
+            //                 $('#loadPanelListModal').modal('show');
+            //                 $scope.isBlocked = false;
+            //             }, function (reason) {
+            //                 ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
+            //                 $scope.isBlocked = false;
+            //             });
+            //         } else {
+            //             PanelListService.loadSavedPanelLists();
+            //             $('#loadPanelListModal').modal('show');
+            //         }
+            //     },
+            //     order: 1
+            // },
             {
                 title: $translate.instant('ENABLE_DISABLE_ALL'),
                 action: function ($event) {
@@ -1779,73 +1800,73 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 },
                 order: 0
             },
-            {
-                title: $translate.instant('SAVE_LIST'),
-                action: function ($event) {
+            // {
+            //     title: $translate.instant('SAVE_LIST'),
+            //     action: function ($event) {
 
-                    if (self.isAndroid && !validateSubscriptionFeature()) {
-                        return;
-                    }
+            //         if (self.isAndroid && !validateSubscriptionFeature()) {
+            //             return;
+            //         }
 
-                    if (!validateLogin()) {
-                        return;
-                    }
+            //         if (!validateLogin()) {
+            //             return;
+            //         }
 
-                    $scope.panelListToSave = $scope.stockTiles;
-                    if (!PanelListService.panelLists || PanelListService.panelLists.length === 0) {
-                        $scope.isBlocked = true;
-                        PanelListService.loadSavedPanelLists().then(function () {
-                            $('#savePanelListModal').modal('show');
-                            $scope.isBlocked = false;
-                        }, function (reason) {
-                            ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
-                            $scope.isBlocked = false;
-                        });
-                    } else {
-                        PanelListService.loadSavedPanelLists();
-                        $('#savePanelListModal').modal('show');
-                    }
+            //         $scope.panelListToSave = $scope.stockTiles;
+            //         if (!PanelListService.panelLists || PanelListService.panelLists.length === 0) {
+            //             $scope.isBlocked = true;
+            //             PanelListService.loadSavedPanelLists().then(function () {
+            //                 $('#savePanelListModal').modal('show');
+            //                 $scope.isBlocked = false;
+            //             }, function (reason) {
+            //                 ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
+            //                 $scope.isBlocked = false;
+            //             });
+            //         } else {
+            //             PanelListService.loadSavedPanelLists();
+            //             $('#savePanelListModal').modal('show');
+            //         }
 
-                    $timeout(function () {
-                        var input = document.getElementById('panelListToSaveName');
-                        input.focus();
-                        input.select();
-                    }, 500);
-                },
-                order: 2
-            },
-            {
-                title: $translate.instant('LOAD'),
-                action: function ($event) {
+            //         $timeout(function () {
+            //             var input = document.getElementById('panelListToSaveName');
+            //             input.focus();
+            //             input.select();
+            //         }, 500);
+            //     },
+            //     order: 2
+            // },
+            // {
+            //     title: $translate.instant('LOAD'),
+            //     action: function ($event) {
 
-                    const hasLocalSavedPanelLists = CutListCfg.useLocalStorageAsRepository && PanelListService.panelLists && PanelListService.panelLists.length > 0;
+            //         const hasLocalSavedPanelLists = CutListCfg.useLocalStorageAsRepository && PanelListService.panelLists && PanelListService.panelLists.length > 0;
 
-                    if (self.isAndroid && !hasLocalSavedPanelLists && !validateSubscriptionFeature()) {
-                        return;
-                    }
+            //         if (self.isAndroid && !hasLocalSavedPanelLists && !validateSubscriptionFeature()) {
+            //             return;
+            //         }
 
-                    if (!validateLogin()) {
-                        return;
-                    }
+            //         if (!validateLogin()) {
+            //             return;
+            //         }
                     
-                    $scope.panelListToLoadDst = $scope.stockTiles;
-                    if ((!PanelListService.panelLists || PanelListService.panelLists.length === 0) && ClientInfo.email) {
-                        // Block and load panel lists from server before opening load panel list modal
-                        $scope.isBlocked = true;
-                        PanelListService.loadSavedPanelLists().then(function () {
-                            $('#loadPanelListModal').modal('show');
-                            $scope.isBlocked = false;
-                        }, function (reason) {
-                            ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
-                            $scope.isBlocked = false;
-                        });
-                    } else {
-                        PanelListService.loadSavedPanelLists();
-                        $('#loadPanelListModal').modal('show');
-                    }
-                },
-                order: 1
-            },
+            //         $scope.panelListToLoadDst = $scope.stockTiles;
+            //         if ((!PanelListService.panelLists || PanelListService.panelLists.length === 0) && ClientInfo.email) {
+            //             // Block and load panel lists from server before opening load panel list modal
+            //             $scope.isBlocked = true;
+            //             PanelListService.loadSavedPanelLists().then(function () {
+            //                 $('#loadPanelListModal').modal('show');
+            //                 $scope.isBlocked = false;
+            //             }, function (reason) {
+            //                 ToastService.error($translate.instant('SERVER_UNAVAILABLE'));
+            //                 $scope.isBlocked = false;
+            //             });
+            //         } else {
+            //             PanelListService.loadSavedPanelLists();
+            //             $('#loadPanelListModal').modal('show');
+            //         }
+            //     },
+            //     order: 1
+            // },
             {
                 title: $translate.instant('ENABLE_DISABLE_ALL'),
                 action: function ($event) {
@@ -2268,7 +2289,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 }
 
                 // Check if calculation is finished
-                if ((data.status === 'RUNNING' && (!!data.solution.mosaics[0].material) && (data.solution.totalUsedArea >= ((1220*2440*$scope.cfg.unusedStockRatio)/100))) || data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) {
+                if (data.solution.elapsedTime >= 60000 || data.status === 'FINISHED' || data.status === 'TERMINATED' || $scope.requestStatus != 0) { // (data.status === 'RUNNING' && (!!data.solution.mosaics[0].material) && (data.solution.totalUsedArea >= ((1220*2440*$scope.cfg.unusedStockRatio)/100))) || 
                     $timeout(function () {
                         $scope.statusMessage = null;
                         // $scope.isCalculating = false;
@@ -2280,6 +2301,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                     }, 2000);
                     // console.log('data : ', data);
                     $scope.statusMessage = '자투리 계산중..';
+                    // resetTilesDuringFetch();
+                    // $scope.tiles = [];
+                    // $scope.tiles.length = 0;
                     // [체크 : 코딩 :: 자투리]
                     $timeout(function(){
 
@@ -2326,14 +2350,21 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                             // });
                             // $scope.stockTiles
                             // 2. 자투리 계산
+                            // data.solution.noFitPanels.forEach(function(data) {
+                            //     addNewTile(data.width, data.height, data.count, data.material, data.label);
+                            // });
+                            // $scope.refreshMaterialsList();
+                            // $scope.refreshEdgeBandList();
                             TilingData.mosaics.forEach(function(tile) {
                                 // 기존 panels에서 제작된거 제외, requestId 까지 추가해야하나?
                                 tile.panels.forEach(function(usedTile){
-                                    $scope.tiles.forEach(function(t){
-                                        // console.log('usedTile', usedTile);
-                                        // console.log('t', t);
+                                    $scope.tiles.forEach(function(t, index, obj){
                                         if (((usedTile.width == t.width && usedTile.height == t.height) || (usedTile.width == t.height && usedTile.height == t.width)) && usedTile.label == t.label) {
-                                            t.count -= usedTile.count;
+                                            if(t.count == 1) {
+                                                obj.splice(index, 1);
+                                            } else {
+                                                t.count -= usedTile.count;
+                                            }
                                         }
                                     });
                                 });
@@ -2425,7 +2456,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         TilingData.clear();
         DrawService.clear();
 
-        $scope.tiles.forEach(function (tile) {
+        $scope.tiles.forEach(function (tile, index, obj) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
                 tile.count = 1;
@@ -2433,15 +2464,13 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             if (tile.width && tile.height && tile.count || (tile.width == null && tile.height == null && tile.count == null && tile.label == null)) {
                 tile.isInvalid = false;
             }
+            // if (tile.count == 0) {
+            //     console.log('tils remove at ', index);
+            //     obj.splice(index, 1);
+            // }
         });
 
-        $scope.tiles.forEach(function (item, index, tile) {
-            if (item.count === 0) {
-                tile.splice(index, 1);
-            }
-        });
-
-        $scope.stockTiles.forEach(function (tile) {
+        $scope.stockTiles.forEach(function (tile, index, obj) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
                 tile.count = 1;
@@ -2456,11 +2485,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             } else {
                 tile.enabled = false;
             }
-        });
-
-        $scope.stockTiles.forEach(function (item, index, tile) {
-            if (item.count === 0) {
-                tile.splice(index, 1);
+            if (tile.count == 0) {
+                console.log('stockTiles remove at ', index);
+                obj.splice(index, 1);
             }
         });
 
@@ -2492,18 +2519,18 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             ToastService.error($translate.instant('MSG_NO_STOCK_PANELS'));
         }
 
-        if (getSmallestArea($scope.tiles) > getBiggestArea($scope.stockTiles)) {
-            if (confirm("Unable to fit specified panels on available stock sheets. Required panels are bigger than stock sheets!\n" +
-                "Are the specified dimensions misplaced? Should panel list be swapped with the stock sheet list?") === true) {
-                let tilesBak = $scope.tiles.slice();
+        // if (getSmallestArea($scope.tiles) > getBiggestArea($scope.stockTiles)) {
+        //     if (confirm("Unable to fit specified panels on available stock sheets. Required panels are bigger than stock sheets!\n" +
+        //         "Are the specified dimensions misplaced? Should panel list be swapped with the stock sheet list?") === true) {
+        //         let tilesBak = $scope.tiles.slice();
 
-                $scope.tiles.length = 0;
-                [].push.apply($scope.tiles, $scope.stockTiles);
+        //         $scope.tiles.length = 0;
+        //         [].push.apply($scope.tiles, $scope.stockTiles);
 
-                $scope.stockTiles.length = 0;
-                [].push.apply($scope.stockTiles, tilesBak);
-            }
-        }
+        //         $scope.stockTiles.length = 0;
+        //         [].push.apply($scope.stockTiles, tilesBak);
+        //     }
+        // }
 
         // Check if there are tiles with no corresponding stock material
         if ($scope.cfg.isMaterialEnabled) {
@@ -2532,6 +2559,16 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         TilingService.submitTask($scope.tiles, $scope.stockTiles, $scope.cfg).then( function (response) {
             $scope.requestStatus = response.data.statusCode;
             $location.search('taskId', response.data.taskId);
+            // {
+            //       "date": null,
+            //       "created": "2021-12-08T05:25:08.083+0000",
+            //       "updated": "2021-12-08T05:25:08.083+0000",
+            //       "userId": "epicenteryoun@gmail.com",
+            //       "name": "Test Cycle 2-2",
+            //       "id": 170382407
+            // }
+            $scope.projectData.push({id: response.data.taskId, date: new Date().toLocaleString().slice(0, 12).replace(/. /g, '-'), userId: 'PECO', name: 'PECO - ' + new Date().toLocaleString().slice(0, 12).replace(/. /g, '-') + " " + new Date().toLocaleTimeString().replace(/오전 /g, ""), created: new Date(), updated: new Date()});
+            $window.localStorage.setItem("projects-", JSON.stringify($scope.projectData));
             $scope.scrolled = false;
             $timeout(taskStatusPoller, 2000);
         }, function (reason) {
@@ -2594,7 +2631,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         TilingData.clear();
         DrawService.clear();
 
-        $scope.tiles.forEach(function (tile) {
+        var removeListOfTile = [];
+
+        $scope.tiles.forEach(function (tile, index, obj) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
                 tile.count = 1;
@@ -2602,15 +2641,30 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             if (tile.width && tile.height && tile.count || (tile.width == null && tile.height == null && tile.count == null && tile.label == null)) {
                 tile.isInvalid = false;
             }
+            // console.log('parent index, ', index);
+            // console.log('parent label, ', tile.label);
+            // console.log('parent count, ', tile.count);
+            // if (tile.count === 0) {
+            //     removeListOfTile.push(index);
+            // }
         });
 
-        $scope.tiles.forEach(function (item, index, tile) {
-            if (item.count === 0) {
-                tile.splice(index, 1);
-            }
-        });
+        // console.log('previous', $scope.tiles);
 
-        $scope.stockTiles.forEach(function (tile) {
+        // $scope.tiles = $scope.tiles.filter(function(item, index){
+        //     if(item.count != 0) return index;
+        // });
+        
+        // removeListOfTile.forEach(function(el){
+        //     console.log('지워질 리스트', el);
+        //     $scope.tiles.splice(el, 1);
+        //     $scope.validateTilesArray();
+        //     $scope.dirtyData = true;
+        // });
+
+        // console.log($scope.tiles);
+
+        $scope.stockTiles.forEach(function (tile, index, obj) {
             // Set count to 1 if none is set
             if (tile.width && tile.height && (tile.count === undefined || tile.count === null)) {
                 tile.count = 1;
@@ -2626,11 +2680,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             } else {
                 tile.enabled = true;
             }
-        });
 
-        $scope.stockTiles.forEach(function (item, index, tile) {
-            if (item.count === 0) {
-                tile.splice(index, 1);
+            if (tile.count === 0) {
+                obj.splice(index, 1);
             }
         });
 
@@ -2662,18 +2714,18 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             ToastService.error($translate.instant('MSG_NO_STOCK_PANELS'));
         }
 
-        if (getSmallestArea($scope.tiles) > getBiggestArea($scope.stockTiles)) {
-            if (confirm("Unable to fit specified panels on available stock sheets. Required panels are bigger than stock sheets!\n" +
-                "Are the specified dimensions misplaced? Should panel list be swapped with the stock sheet list?") === true) {
-                let tilesBak = $scope.tiles.slice();
+        // if (getSmallestArea($scope.tiles) > getBiggestArea($scope.stockTiles)) {
+        //     if (confirm("Unable to fit specified panels on available stock sheets. Required panels are bigger than stock sheets!\n" +
+        //         "Are the specified dimensions misplaced? Should panel list be swapped with the stock sheet list?") === true) {
+        //         let tilesBak = $scope.tiles.slice();
 
-                $scope.tiles.length = 0;
-                [].push.apply($scope.tiles, $scope.stockTiles);
+        //         $scope.tiles.length = 0;
+        //         [].push.apply($scope.tiles, $scope.stockTiles);
 
-                $scope.stockTiles.length = 0;
-                [].push.apply($scope.stockTiles, tilesBak);
-            }
-        }
+        //         $scope.stockTiles.length = 0;
+        //         [].push.apply($scope.stockTiles, tilesBak);
+        //     }
+        // }
 
         // Check if there are tiles with no corresponding stock material
         if ($scope.cfg.isMaterialEnabled) {
@@ -2702,6 +2754,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         TilingService.submitTask($scope.tiles, $scope.stockTiles, $scope.cfg).then( function (response) {
             $scope.requestStatus = response.data.statusCode;
             $location.search('taskId', response.data.taskId);
+            $scope.projectData.push({id: response.data.taskId, date: new Date().toLocaleString().slice(0, 12).replace(/. /g, '-'), userId: 'PECO', name: 'PECO - ' + new Date().toLocaleString().slice(0, 12).replace(/. /g, '-') + " " + new Date().toLocaleTimeString().replace(/오전 /g, ""), created: new Date(), updated: new Date()});
+            $window.localStorage.setItem("projects-", JSON.stringify($scope.projectData));
             $scope.scrolled = false;
             $timeout(taskStatusPoller, 2000);
         }, function (reason) {
@@ -3087,9 +3141,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             return;
         }
 
-        if (!validateLogin()) {
-            return;
-        }
+        // if (!validateLogin()) {
+        //     return;
+        // }
 
         //ProjectService.loadSavedProjects();
         $('#saveProjectModal').modal('show');
@@ -3108,9 +3162,9 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             return;
         }
 
-        if (!hasLocalStorageSavedProjects && !validateLogin()) {
-            return;
-        }
+        // if (!hasLocalStorageSavedProjects && !validateLogin()) {
+        //     return;
+        // }
 
         // Scroll to top as workaround for issue with project options menu positioning
         $("html,body").animate({scrollTop: 0}, "slow");

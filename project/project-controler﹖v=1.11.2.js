@@ -5,6 +5,7 @@ app.controller('ProjectControler', ['$scope', '$http', 'CutListCfg', '$httpParam
 
     $scope.isLoading = false;
     $scope.message = null;
+    $scope.projectsData = JSON.parse($window.localStorage.getItem("projects-"));
 
     $scope.clearContextMenu = function() {
         var filteredRows = $scope.gridApi.core.getVisibleRows($scope.gridApi.grid);

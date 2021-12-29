@@ -355,7 +355,7 @@ app.service('CsvHandler', ['fileReader', 'DimensionProcessor', 'ToastService', '
                 continue;
             } finally {
                 if (!tile.count || isNaN(tile.count)) {
-                    tile.count = 1;
+                    tile.count = 0;
                 }
                 if (!tile.width || isNaN(tile.width.charAt(0))) {
                     tile.width = 1;
