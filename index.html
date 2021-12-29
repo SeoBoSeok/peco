@@ -198,7 +198,7 @@
         <span id="jcalculate-btn">
             <button ng-show="dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-jtask hidden-xs" style="min-width: 110px" ng-click="jSubmitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> 자투리계산&nbsp&nbsp</button>
             <button ng-show="!dirtyData && !isCalculating" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-jtask hidden-xs" style="min-width: 110px" ng-click="jSubmitTask()" href="#"><i class="material-icons md-center hidden-xs">play_arrow</i> 자투리계산&nbsp&nbsp</button>
-            <button ng-show="isCalculating && tiling.mosaics.length > 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-success hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'ACCEPT' | translate }}&nbsp&nbsp</button>
+            <button ng-show="isCalculating && tiling.mosaics.length > 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-jtask hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'ACCEPT' | translate }}&nbsp&nbsp</button>
             <button ng-show="isCalculating && tiling.mosaics.length === 0" ng-disabled="!cutListService.isActionAllowed()" class="btn btn-top button-danger hidden-xs" style="min-width: 110px" ng-click="stopTask()" href="#"><i class="material-icons md-center hidden-xs">stop</i> {{ 'CANCEL' | translate }}&nbsp&nbsp</button>
         </span>
 
@@ -261,7 +261,7 @@
 
             <li><a ng-click="clear()" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="file"></i> {{ 'RESET_DATA' | translate }}</a></li>
             <li class="hidden-lg hidden-md hidden-sm"><a ng-click="showSaveProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="download"></i> {{ 'SAVE_PROJECT' | translate }}</a></li>
-            <li><a ng-click="showLoadProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="upload"></i> {{ 'LOAD_PROJECT' | translate }}</a></li>
+            <!-- <li><a ng-click="showLoadProjectModal()" href="#"></span><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="upload"></i> {{ 'LOAD_PROJECT' | translate }}</a></li>
 
             <li id="menu-separator-2" role="separator" class="divider"></li>
 
@@ -276,7 +276,7 @@
             <li><a ng-if="isAndroid() && debugMode" ng-click="android.consumeIap()" href="#"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="dollar-sign"></i> CONSUME IAP</a></li>
             <li ng-if="clientInfo.hasActiveSubscription()"><a ng-href="mailto:support+{{subscriptionService.getSubscriptionPlanLevelName() | lowercase}}@cutlistoptimizer.com?subject=PECO Optimizer {{clientInfo.version + ' ' + subscriptionService.getSubscriptionPlanLevelName() + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
             <li ng-if="!clientInfo.hasActiveSubscription()"><a ng-href="mailto:support@cutlistoptimizer.com?subject=PECO Optimizer {{clientInfo.version + ' | ' + clientInfo.id}}{{tilingData.data.taskId ? ' | calculation ' + tilingData.data.taskId : ''}}"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="alert-triangle"></i> {{ 'REPORT_AN_ISSUE' | translate }}</a></li>
-            <li><a ng-click="showAboutModal()"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="info"></i> {{ 'ABOUT' | translate }}</a></li>
+            <li><a ng-click="showAboutModal()"><i style="margin-bottom: -6px; margin-right: 6px; margin-left: -3px" data-feather="info"></i> {{ 'ABOUT' | translate }}</a></li> -->
 
         </ul>
 
