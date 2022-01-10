@@ -2415,6 +2415,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                                         });
                                     }
                                 });
+                                tile.realUnusedStockCount = countingIndex;
                                 // }
                             });
                             $scope.isCalculating = false;

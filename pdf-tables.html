@@ -18,7 +18,7 @@
                             <th style="padding-right:10px; padding-right: 10px; border-right: 1px solid darkgray; text-align: left; line-height: 1.2;">{{ 'NBR_MOSAICS' | translate }}</th>
                             <td style="padding-left:10px;" ng-bind="tiling.mosaics.length"></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <th style="border-right: 1px solid darkgray; padding-right: 10px; text-align: left; line-height: 1.2;">{{ 'TOTAL_USED_AREA' | translate }}</th>
                             <td style="padding-left:10px;"><span ng-bind="formatArea(tiling.data.totalUsedArea)"></span>&nbsp;<small ng-bind="Math.round(tiling.data.totalUsedAreaRatio * 100) + '%'"></small></td>
                         </tr>
@@ -33,15 +33,15 @@
                         <tr>
                             <th style="border-right: 1px solid darkgray; padding-right: 10px; text-align: left; line-height: 1.2;">{{ 'TOTAL_CUT_LENGTH' | translate }}</th>
                             <td style="padding-left:10px;" ng-bind="dimensionProcessor.formatDimension(tiling.data.totalCutLength)"></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th style="border-right: 1px solid darkgray; padding-right: 10px; text-align: left; line-height: 1.2;">{{ 'CUT_THICKNESS' | translate }}</th>
                             <td style="padding-left:10px;" ng-bind="dimensionProcessor.formatDimension(tiling.data.request.configuration.cutThickness)"></td>
                         </tr>
-                        <tr ng-if="cfg.hasEdgeBanding" ng-repeat="(key, value) in tiling.data.edgeBands">
+                        <!-- <tr ng-if="cfg.hasEdgeBanding" ng-repeat="(key, value) in tiling.data.edgeBands">
                             <th style="border-right: 1px solid darkgray; padding-right: 10px; text-align: left; line-height: 1.2;">{{key}}</span></th>
                             <td style="padding-left:10px;" ng-bind="dimensionProcessor.formatDimension(value)"></td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -102,7 +102,7 @@
                             <th style="text-align: left">{{ 'QUANTITY' | translate }}</th>
                             <td ng-bind-html="mosaic.ocurrences"></td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <th style="text-align: left">{{ 'USED_AREA' | translate }}</th>
                             <td><span ng-bind="formatArea(mosaic.usedArea)"></span>&nbsp;<small ng-bind="Math.round(mosaic.usedAreaRatio * 100) + '%'"></small></td>
                         </tr>
@@ -116,14 +116,15 @@
                         </tr>                                        <tr>
                             <th style="text-align: left">{{ 'CUT_LENGTH' | translate }}</th>
                             <td ng-bind="dimensionProcessor.formatDimension(mosaic.cutLength)"></td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <th style="text-align: left">{{ 'PANELS' | translate }}</th>
                             <td ng-bind="mosaic.nbrFinalPanels"></td>
                         </tr>
                         <tr>
                             <th style="text-align: left">{{ 'WASTED_PANELS' | translate }}</th>
-                            <td ng-bind="mosaic.nbrWastedPanels"></td>
+                            <td ng-bind="mosaic.realUnusedStockCount"></td>
+                            <!-- (((d_tile.width * d_tile.height) >= ((1220*2440*$scope.cfg.unusedStockRatio)/100)) && !d_tile.hasChildren && !d_tile.final) -->
                         </tr>
                         <tr ng-if="cfg.hasEdgeBanding" ng-repeat="(key, value) in mosaic.edgeBands">
                             <th style="text-align: left">{{key}}</span></th>
@@ -151,13 +152,13 @@
                 </table>
 
                 <!-- Cuts table -->
-                <table ng-show="pdfGenerator.cfg.showCutsTable && mosaic.cuts.length > 0" class="table pdf-table" style="margin-top: 20px">
+                <!-- <table ng-show="pdfGenerator.cfg.showCutsTable && mosaic.cuts.length > 0" class="table pdf-table" style="margin-top: 20px">
                     <thead>
                         <tr style="background-color: #ddd;">
                             <th>#</th>
                             <th>{{ 'PANEL' | translate }}</th>
                             <th>{{ 'CUT' | translate }}</th>
-<!--                            <th>{{ 'DIM' | translate }}</th>-->
+                           <th>{{ 'DIM' | translate }}</th>
                             <th style="padding-left: 0px;">{{ 'RESULT' | translate }}</th>
                         </tr>
                     </thead>
@@ -166,7 +167,7 @@
                             <th style="padding-right: 6px; white-space: nowrap" ng-bind="$index + 1"></th>
                             <td style="padding-right: 6px; white-space: nowrap"><span ng-bind-html="dimensionProcessor.formatDimensionsHtml(cut.originalWidth, cut.originalHeight)"></span></td>
                             <td style="padding-right: 6px; white-space: nowrap"><span class="math" ng-bind="cut.horizontal ? 'x=' : 'y='"></span><span ng-bind="dimensionProcessor.formatDimension(cut.cutCoord, false)"></span></td>
-<!--                            <td ng-bind="dimensionProcessor.formatDimension(Math.max(cut.x2 - cut.x1, cut.y2 - cut.y1))"></td>-->
+                           <td ng-bind="dimensionProcessor.formatDimension(Math.max(cut.x2 - cut.x1, cut.y2 - cut.y1))"></td>
                             <td>
                                 <div class="pull-left" style="max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" ng-bind-html="generateCutResultChild1(cut, mosaic) | to_trusted"></div>
                                 <div class="pull-left" style="max-width: 10%; color: #90a4ae">&nbsp;\&nbsp;</div>
@@ -174,7 +175,7 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
 
             </div>
         </div>

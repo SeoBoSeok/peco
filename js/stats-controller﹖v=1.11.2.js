@@ -93,6 +93,8 @@ app.controller('StatsController', ['$scope', 'TilingData', 'DimensionProcessor',
             for (i = 0; i < tiles.length; i++) {
                 var tile = tiles[i];
 
+                console.log(tile);
+
                 if (tile.enabled === false || !(tile.count > 0)) {
                     continue;
                 }

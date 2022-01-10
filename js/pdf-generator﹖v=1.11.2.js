@@ -165,6 +165,7 @@ app.service('PdfGenerator', ['DrawService', '$translate', '$q', '$timeout', 'Til
                         onrendered: function (resolvedPromiseIndex) {
                             return function (canvas) {
                                 var canvasImgData = canvas.toDataURL('image/jpeg');
+                                // console.log(canvasImgData);
                                 infoImgData.push(canvasImgData);
                                 deferreds[resolvedPromiseIndex].resolve();
                                 refreshPdfExportProgress();
