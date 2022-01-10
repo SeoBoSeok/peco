@@ -23,7 +23,7 @@ app.controller('PdfControler', ['$scope', 'CutListCfg', 'PdfGenerator', '$timeou
     } else {
         PdfGenerator.cfg = {
             font: $scope.pdfFontList[0],
-            headerText: "PECO Optimizer",
+            headerText: "PECO v1.0",
             additionalText: "",
             showSummary: true,
             showDate: true,

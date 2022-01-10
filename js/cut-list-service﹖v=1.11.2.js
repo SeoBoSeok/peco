@@ -49,8 +49,9 @@ app.service('TilingService', ['$http', '$location', 'TilingData', 'ClientInfo', 
             if (!cfg.considerOrientation) {
                 tile.orientation = 0;
             }
+            // 강제 적용. localStorage sync 문제 [체크]
             if (!cfg.isMaterialEnabled) {
-                tile.material = null;
+                tile.material = true;
             }
             if (!cfg.hasEdgeBanding) {
                 tile.edge = null;
@@ -70,8 +71,9 @@ app.service('TilingService', ['$http', '$location', 'TilingData', 'ClientInfo', 
             if (!cfg.considerOrientation) {
                 tile.orientation = 0;
             }
+            // 강제 적용. localStorage sync 문제 [체크]
             if (!cfg.isMaterialEnabled) {
-                tile.material = null;
+                tile.material = true;
             }
 
             if (cfg.units === DimensionProcessor.UnitsEnum.feet_inches ||
