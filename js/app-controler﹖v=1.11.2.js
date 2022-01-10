@@ -519,8 +519,11 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             // [코딩] :: percent for unusedStock Boundary Input
             // unusedStock Ratio
             $scope.cfg.unusedStockRatio = parseFloat($scope.cfg.unusedStockRatio);
+            if($scope.cfg.unusedStockRatio === undefined) {
+                $scope.cfg.unusedStockRatio = 3.3;
+            }
             if (isNaN($scope.cfg.unusedStockRatio)) {
-                $scope.cfg.unusedStockRatio = 3;
+                $scope.cfg.unusedStockRatio = 3.3;
             }
 
             // Set defaults if no cfg present
@@ -537,6 +540,10 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 $scope.cfg.isTileLabelVisible = true;
             }
             if ($scope.cfg.isMaterialEnabled === undefined) {
+                $scope.cfg.isMaterialEnabled = true;
+            }
+            // forced true option
+            if ($scope.cfg.isMaterialEnabled === false) {
                 $scope.cfg.isMaterialEnabled = true;
             }
             if ($scope.cfg.considerOrientation === undefined) {
@@ -793,7 +800,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
     $scope.$watch('cfg.unusedStockRatio', function (newValue, oldValue) {
         if (newValue !== oldValue) {
             if ($scope.cfg.unusedStockRatio < 0) {
-                $scope.cfg.unusedStockRatio = 3;
+                $scope.cfg.unusedStockRatio = 3.3;
             }
             $scope.dirtyData = true;
             $scope.currentProject.isDirty = true;
@@ -2360,6 +2367,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                                 tile.panels.forEach(function(usedTile){
                                     $scope.tiles.forEach(function(t, index, obj){
                                         if (((usedTile.width == t.width && usedTile.height == t.height) || (usedTile.width == t.height && usedTile.height == t.width)) && usedTile.label == t.label) {
+                                            console.log(t.count, usedTile.label, usedTile.width, usedTile.height);
                                             if(t.count == 1) {
                                                 obj.splice(index, 1);
                                             } else {
@@ -2369,13 +2377,18 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                                     });
                                 });
                                 // 기존 stock에서 사용된거 제외
+                                // [오류]
+                                // $scope.sotckTiles info 체크
+                                // TilingData.mosaics info 체크
+                                // id 활용방안 (제일 좋음)
+                                // width, height 추가적으로 비교 (정확도 높일 수 있는가)
                                 // tile.forEach(function(mo){
                                 $scope.stockTiles.forEach(function(stock, index, obj){
                                     console.log('stock', stock);
                                     if (tile.material == stock.material && tile.stockLabel == stock.label) {
                                         console.log('기존 stock에서 사용된거 제외 (requestStockId) : ', tile.requestStockId, "::", stock.requestObjId);
                                         console.log('기존 stock에서 사용된거 제외 (material) : ', tile.material, "::", stock.material);
-                                        console.log('기존 stock에서 사용된거 제외 : (label) ', tile.stockLabel, "::", stock.label);
+                                        console.log('기존 stock에서 사용된거 제외 (label) ', tile.stockLabel, "::", stock.label);
                                         // stock.count -= 1;
                                         // [코딩] :: todo
                                         if (stock.count == 1) {
@@ -2898,12 +2911,12 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
         // Check whether to stack or not panels with same layout
         if ($scope.cfg.stackEqualMosaicLayout === 0) {
             if (TilingData.data && TilingData.data.maxGroupOcurrences > 2 && TilingData.data.mosaics.length > 5) {
-                TilingData.shouldGroupEqualMosaics = true;
+                TilingData.shouldGroupEqualMosaics = false;
             } else {
                 TilingData.shouldGroupEqualMosaics = false;
             }
         } else if ($scope.cfg.stackEqualMosaicLayout === 1) {
-            TilingData.shouldGroupEqualMosaics = true;
+            TilingData.shouldGroupEqualMosaics = false;
         } else if ($scope.cfg.stackEqualMosaicLayout === 2) {
             TilingData.shouldGroupEqualMosaics = false;
         }

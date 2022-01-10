@@ -41,6 +41,6 @@ app.service('CutListCfg', ['$location',
     this.init = function(cfg) {
         cfg.hasEdgeBanding = this.isEdgeBandingSupported ? cfg.hasEdgeBanding : false;
         cfg.considerOrientation = this.isGrainDirectionSupported ? cfg.considerOrientation : false;
-        cfg.isMaterialEnabled = this.isMaterialSupported ? cfg.isMaterialEnabled : false;
+        cfg.isMaterialEnabled = true;
     };
 }]);

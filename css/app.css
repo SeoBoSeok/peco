@@ -181,7 +181,10 @@
     padding: 0px 7px 0px 7px;
     margin: 5px 1px 0px 1px;
     vertical-align: middle;
+    line-height: 30px;
 }
+.btn-top .material-icons {margin-top: -5px;}
+
 @media (max-width: 768px) {
     .btn-top {
         margin: 3px 3px 0px 0px;

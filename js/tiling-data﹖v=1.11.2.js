@@ -4,7 +4,7 @@ app.service('TilingData', ['DimensionProcessor',
     const self = this;
 
     self.data = null;
-
+    // [코딩] :: group check
     self.shouldGroupEqualMosaics = true;
 
     self.getMosaics = function() {

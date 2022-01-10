@@ -975,7 +975,7 @@ app.factory('DrawService', ['TilingData', '$window', '$timeout', '$translate', '
                 .style("stroke-width", strokeWidth)
                 .classed('background', true)
                 .on("click", function () {
-                    //alert("test");
+                    alert("test");
                 })
                 .on("mouseover", function () {
                     cleanTmpSvgOverlayElems();
@@ -1249,30 +1249,30 @@ app.factory('DrawService', ['TilingData', '$window', '$timeout', '$translate', '
 
                 var textLabel;
 
-                if (tile.width > tile.height / 2) {
-                    textLabel = self.svgContainer.append("text")
-                        .attr("x", (tile.x + tile.width * 0.5) * mosaic.xRatio)
-                        .attr("y", getTileY2(mosaic, tile.y + tile.height * 0.5) + self.textMargin * 0.4)
-                        .attr("fill", "#555")
-                        .attr("font-weight", "bold")
-                        .attr('text-anchor', 'middle')
-                        .style("font-size", self.fontSize)
-                        .style("pointer-events", "none")
-                        .style("user-select", "none")
-                        .text(tile.label);
-                } else {
-                    textLabel = self.svgContainer.append("text")
-                        .attr("fill", "#555")
-                        .attr("font-weight", "bold")
-                        .attr('text-anchor', 'middle')
-                        .style("font-size", self.fontSize)
-                        .style("pointer-events", "none")
-                        .style("user-select", "none")
-                        .text(tile.label)
-                        .attr("transform", function (d, i) {
-                            return "translate(" + (((tile.x + tile.width * 0.5) * mosaic.xRatio) + self.textMargin * 0.25) + " , " + getTileY2(mosaic, tile.y + tile.height * 0.5) + ") rotate(270)";
-                        });
-                }
+                // if (tile.width > tile.height / 2) {
+                //     textLabel = self.svgContainer.append("text")
+                //         .attr("x", (tile.x + tile.width * 0.5) * mosaic.xRatio)
+                //         .attr("y", getTileY2(mosaic, tile.y + tile.height * 0.5) + self.textMargin * 0.4)
+                //         .attr("fill", "#555")
+                //         .attr("font-weight", "bold")
+                //         .attr('text-anchor', 'middle')
+                //         .style("font-size", self.fontSize)
+                //         .style("pointer-events", "none")
+                //         .style("user-select", "none")
+                //         .text(tile.label);
+                // } else {
+                //     textLabel = self.svgContainer.append("text")
+                //         .attr("fill", "#555")
+                //         .attr("font-weight", "bold")
+                //         .attr('text-anchor', 'middle')
+                //         .style("font-size", self.fontSize)
+                //         .style("pointer-events", "none")
+                //         .style("user-select", "none")
+                //         .text(tile.label)
+                //         .attr("transform", function (d, i) {
+                //             return "translate(" + (((tile.x + tile.width * 0.5) * mosaic.xRatio) + self.textMargin * 0.25) + " , " + getTileY2(mosaic, tile.y + tile.height * 0.5) + ") rotate(270)";
+                //         });
+                // }
 
                 dimensionsSvgElems.push(textLabel);
             }
