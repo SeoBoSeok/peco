@@ -21,7 +21,7 @@ var translationsEN = {
     TOTAL_USED_AREA: "총 사용 면적",
     WASTED_AREA: "자투리 면적",
     TOTAL_WASTED_AREA: "총 자투리 면적",
-    WASTED_PANELS: "총 자투리 갯수",
+    WASTED_PANELS: "재고 자투리 개수",
     STATS: "전체 통계",
     SHEET_STATISTICS: "사용 판재 통계",
     NBR_MOSAICS: "사용 재고 판재",
