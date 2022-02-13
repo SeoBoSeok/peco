@@ -530,8 +530,8 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
             if ($scope.cfg.optimizationFactor === undefined) {
                 $scope.cfg.optimizationFactor = 1;
             }
-            if ($scope.cfg.optimizationPriority === undefined) {
-                $scope.cfg.optimizationPriority = 0;
+            if ($scope.cfg.optimizationPriority === 0) {
+                $scope.cfg.optimizationPriority = 1;
             }
             if ($scope.cfg.cutOrientationPreference === undefined) {
                 $scope.cfg.cutOrientationPreference = 0;
@@ -587,7 +587,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
                 unusedStockRatioInput : CutListCfg.defaultUnusedStockRatio,
                 useSingleStockUnit: false,
                 accuracyFactor: 0,
-                optimizationPriority: 0,
+                optimizationPriority: 1,
                 cutOrientationPreference: 0,
                 optimizationFactor: 1,
                 showDimensions: true,
@@ -3519,6 +3519,7 @@ app.controller('AppCtrl', function(ProjectService, TilingService, TilingData, Dr
     $(window).on('beforeunload', function () { saveDataLocalStorage(); });
     // localStorage 저장 [체크]
     function saveDataLocalStorage() {
+        $window.localStorage.removeItem("cfg" + localStorageKeySuffix);
         try {
             $scope.cfg.svgTransform = DrawService.transform();
 
